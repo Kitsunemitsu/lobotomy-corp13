@@ -42,3 +42,12 @@
 /datum/ego_datum/armor/wings
 	item_path = /obj/item/clothing/suit/armor/ego_gear/wings
 	cost = 35
+
+// Rudolta - Infinite Hatred
+/datum/ego_datum/weapon/infinite_hatred
+	item_path = /obj/item/ego_weapon/infinite_hatred
+	cost = 35
+
+/datum/ego_datum/armor/infinite_hatred
+	item_path = /obj/item/clothing/suit/armor/ego_gear/infinite_hatred
+	cost = 35

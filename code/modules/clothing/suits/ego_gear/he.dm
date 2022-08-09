@@ -41,3 +41,10 @@
 	icon_state = "wings"
 	//Just Kinda meh. A lot of WAWs do black at the time of writing so
 	armor = list(RED_DAMAGE = 10, WHITE_DAMAGE = 40, BLACK_DAMAGE = -20, PALE_DAMAGE = 20)
+
+/obj/item/clothing/suit/armor/ego_gear/infinite_hatred
+	name = "infinite hatred"
+	desc = "When the rusty sleigh bells are ajingle, Christmas begins."
+	icon_state = "infinite_hatred"
+	//Just Kinda meh. A lot of WAWs do black at the time of writing so
+	armor = list(RED_DAMAGE = 30, WHITE_DAMAGE = 40, BLACK_DAMAGE = -10, PALE_DAMAGE = -20)

@@ -7,6 +7,8 @@
 	icon_dead = "rudolta_dead"
 	maxHealth = 1200
 	health = 1200
+	pixel_x = -16
+	base_pixel_x = -16
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 1.5, WHITE_DAMAGE = 0.5, BLACK_DAMAGE = 1, PALE_DAMAGE = 2)
 	stat_attack = HARD_CRIT
 	attack_verb_continuous = "nudges"
@@ -15,6 +17,8 @@
 	can_breach = TRUE
 	threat_level = HE_LEVEL
 	start_qliphoth = 2
+	speed = 4
+	move_to_delay = 5
 	work_chances = list(
 						ABNORMALITY_WORK_INSTINCT = list(20, 40, 40, 35, 0),
 						ABNORMALITY_WORK_INSIGHT = list(50, 60, 60, 55, 50),
@@ -25,8 +29,8 @@
 	work_damage_type = WHITE_DAMAGE
 
 	ego_list = list(
-//		/datum/ego_datum/weapon/infinitehatred,
-//		/datum/ego_datum/armor/infinitehatred
+		/datum/ego_datum/weapon/infinitehatred,
+		/datum/ego_datum/armor/infinitehatred
 		)
 
 	var/pulse_cooldown
@@ -57,7 +61,7 @@
 
 /mob/living/simple_animal/hostile/abnormality/rudolta/proc/WhitePulse()
 	pulse_cooldown = world.time + pulse_cooldown_time
-	playsound(src, 'sound/abnormalities/bluestar/pulse.ogg', 50, FALSE, 8)
+	playsound(src, 'sound/misc/desecration-02.ogg', 50, FALSE, 8)
 	for(var/mob/living/L in livinginrange(8, src))
 		if(faction_check_mob(L))
 			continue
