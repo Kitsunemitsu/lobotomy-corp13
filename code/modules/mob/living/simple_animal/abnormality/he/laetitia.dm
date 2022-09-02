@@ -14,12 +14,14 @@
 		ABNORMALITY_WORK_REPRESSION = 0
 			)
 	work_damage_amount = 8
-	work_damage_type = WHITE_DAMAGE
+	work_damage_type = BLACK_DAMAGE
+	max_boxes = 16 // Accurate to base game
 
 	ego_list = list(
 		/datum/ego_datum/weapon/prank,
 		/datum/ego_datum/armor/prank
 		)
+	gift_type = /datum/ego_gifts/prank
 
 /mob/living/simple_animal/hostile/abnormality/laetitia/neutral_effect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(70))	//Not 100% of the time to be funny
@@ -33,18 +35,29 @@
 	icon_state = "witchfriend"
 	icon_living = "witchfriend"
 	icon_dead = "witchfriend_dead"
-	maxHealth = 700
-	health = 700
+	maxHealth = 800
+	health = 800
 	pixel_x = -16
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0.8, WHITE_DAMAGE = 0.8, BLACK_DAMAGE = 1.2, PALE_DAMAGE = 1)
-	melee_damage_type = BLACK_DAMAGE
-	armortype = BLACK_DAMAGE
+	melee_damage_type = RED_DAMAGE
+	armortype = RED_DAMAGE
 	stat_attack = HARD_CRIT
 	melee_damage_lower = 20
-	melee_damage_upper = 20
-	attack_verb_continuous = "pokes"
-	attack_verb_simple = "pokes"
-	attack_sound = 'sound/abnormalities/fragment/attack.ogg'
+	melee_damage_upper = 30
+	attack_verb_continuous = "stabs"
+	attack_verb_simple = "stab"
+	attack_sound = 'sound/abnormalities/laetitia/spider_attack.ogg'
+	deathsound = 'sound/abnormalities/laetitia/spider_dead.ogg'
+
+/mob/living/simple_animal/hostile/gift/Initialize()
+	. = ..()
+	playsound(get_turf(src), 'sound/abnormalities/laetitia/spider_born.ogg', 50, 1)
+
+/mob/living/simple_animal/hostile/gift/death(gibbed)
+	density = FALSE
+	animate(src, alpha = 0, time = 10 SECONDS)
+	QDEL_IN(src, 10 SECONDS)
+	..()
 
 //Tricked
 //Explodes after 5 minutes

@@ -13,9 +13,11 @@
 	var/meltdown_time = 0
 	/// Can the abnormality even meltdown?
 	var/can_meltdown = TRUE
+	/// Work types will instead redirect to those, if listed
+	var/list/scramble_list = list()
 
 /obj/machinery/computer/abnormality/Initialize()
-	..()
+	. = ..()
 	GLOB.abnormality_consoles += src
 	flags_1 |= NODECONSTRUCT_1
 
@@ -53,9 +55,22 @@
 	dat += "<b><span style='color: [THREAT_TO_COLOR[datum_reference.threat_level]]'>\[[THREAT_TO_NAME[datum_reference.threat_level]]\]</span> [datum_reference.name]</b><br>"
 	if(datum_reference.overload_chance != 0)
 		dat += "<span style='color: [COLOR_VERY_SOFT_YELLOW]'>Current success chance is modified by [datum_reference.overload_chance]%</span><br>"
+	if(datum_reference.understanding != 0)
+		dat += "<span style='color: [COLOR_BLUE_LIGHT]'>Current Understanding is: [round((datum_reference.understanding/datum_reference.max_understanding)*100, 0.01)]%, granting a [datum_reference.understanding]% Work Success and Speed bonus.</span><br>"
 	dat += "<br>"
-	for(var/wt in datum_reference.available_work)
-		dat += "<A href='byond://?src=[REF(src)];do_work=[wt]'>[wt] Work</A> <br>"
+	var/list/work_list = datum_reference.available_work
+	if(istype(SSlobotomy_corp.core_suppression, /datum/suppression/information))
+		work_list = shuffle(work_list) // A minor annoyance, at most
+	for(var/wt in work_list)
+		var/work_display = "[wt] Work"
+		if(scramble_list[wt] != null)
+			work_display += "?"
+		if(istype(SSlobotomy_corp.core_suppression, /datum/suppression/information))
+			work_display = Gibberish(work_display, TRUE, 60)
+		if(HAS_TRAIT(user, TRAIT_WORK_KNOWLEDGE)) // Might be temporary until we add upgrades
+			dat += "<A href='byond://?src=[REF(src)];do_work=[wt]'>[work_display] \[[datum_reference.get_work_chance(wt, user)]%\]</A> <br>"
+		else
+			dat += "<A href='byond://?src=[REF(src)];do_work=[wt]'>[work_display]</A> <br>"
 	var/datum/browser/popup = new(user, "abno_work", "Abnormality Work Console", 400, 300)
 	popup.set_content(dat)
 	popup.open()
@@ -89,12 +104,14 @@
 	var/sanity_result = round(datum_reference.current.fear_level - get_user_level(user))
 	var/sanity_damage = -(max(((user.maxSanity * 0.26) * (sanity_result)), 0))
 	var/work_time = datum_reference.max_boxes
+	if(work_type in scramble_list)
+		work_type = scramble_list[work_type]
 	if(!training)
 		SEND_SIGNAL(user, COMSIG_WORK_STARTED, datum_reference, user, work_type)
 	if(!HAS_TRAIT(user, TRAIT_WORKFEAR_IMMUNE))
 		user.adjustSanityLoss(sanity_damage)
 	if(user.stat == DEAD || user.sanity_lost)
-		finish_work(user, work_type, 0, work_time) // Assume total failure
+		finish_work(user, work_type, 0) // Assume total failure
 		return
 	switch(sanity_result)
 		if(-INFINITY to -1)
@@ -111,10 +128,7 @@
 	update_icon()
 	working = TRUE
 	var/work_chance = datum_reference.get_work_chance(work_type, user)
-	work_chance *= user.physiology.work_success_mod // Applies Pre-Temperence now.
-	work_chance += get_attribute_level(user, TEMPERANCE_ATTRIBUTE) / 5 // For a maximum of 26 at 130 temperance
-	work_chance = clamp(work_chance, 0, 100)
-	var/work_speed = 2 SECONDS / (1 + (get_attribute_level(user, TEMPERANCE_ATTRIBUTE) / 100))
+	var/work_speed = 2 SECONDS / (1 + ((get_attribute_level(user, TEMPERANCE_ATTRIBUTE) + datum_reference.understanding) / 100))
 	var/success_boxes = 0
 	for(var/i = 1 to work_time)
 		user.Stun(work_speed) // TODO: Probably temporary
@@ -129,32 +143,36 @@
 			break // Dying
 		if(!(datum_reference.current.status_flags & GODMODE))
 			break // Somehow it escaped
-	finish_work(user, work_type, success_boxes, work_time, work_speed, training)
+	finish_work(user, work_type, success_boxes, work_speed, training)
 
 /obj/machinery/computer/abnormality/proc/do_work(chance)
 	if(prob(chance))
-		playsound(src, 'sound/machines/synth_yes.ogg', 25, FALSE, -3)
+		playsound(src, 'sound/machines/synth_yes.ogg', 25, FALSE, -4)
 		return TRUE
-	playsound(src, 'sound/machines/synth_no.ogg', 25, FALSE, -3)
+	playsound(src, 'sound/machines/synth_no.ogg', 25, FALSE, -4)
 	return FALSE
 
-/obj/machinery/computer/abnormality/proc/finish_work(mob/living/carbon/human/user, work_type, pe = 0, max_pe = 0, work_speed = 2 SECONDS, training)
-	working = FALSE
+/obj/machinery/computer/abnormality/proc/finish_work(mob/living/carbon/human/user, work_type, pe = 0, work_speed = 2 SECONDS, training = FALSE)
 	if(!training)
 		SEND_SIGNAL(user, COMSIG_WORK_COMPLETED, datum_reference, user, work_type)
 	if(!work_type)
 		work_type = pick(datum_reference.available_work)
-	if(max_pe != 0)
-		visible_message("<span class='notice'>[work_type] work finished. [pe]/[max_pe] PE acquired.")
+	if(datum_reference.max_boxes != 0)
+		visible_message("<span class='notice'>[work_type] work finished. [pe]/[datum_reference.max_boxes] PE acquired.</span>")
+		if(pe >= datum_reference.success_boxes)
+			visible_message("<span class='notice'>Work Result: Good</span>")
+		else if(pe >= datum_reference.neutral_boxes)
+			visible_message("<span class='notice'>Work Result: Neutral</span>")
+		else
+			visible_message("<span class='notice'>Work Result: Bad</span>")
 	if(istype(user))
 		if(!training)
-			datum_reference.work_complete(user, work_type, pe, max_pe, work_speed*max_pe)
+			datum_reference.work_complete(user, work_type, pe, work_speed*datum_reference.max_boxes)
+			SSlobotomy_corp.WorkComplete(pe, (meltdown_time <= 0))
 		else
-			datum_reference.current.work_complete(user, work_type, pe, datum_reference.success_boxes, work_speed*max_pe)
-	if((datum_reference.qliphoth_meter_max > 0) && (datum_reference.qliphoth_meter <= 0))
-		visible_message("<span class='danger'>Warning! Qliphoth level reduced to 0!")
-		playsound(src, 'sound/effects/alertbeep.ogg', 50, FALSE)
-		return FALSE
+			datum_reference.current.work_complete(user, work_type, pe, work_speed*datum_reference.max_boxes)
+	meltdown_time = 0
+	working = FALSE
 	return TRUE
 
 /obj/machinery/computer/abnormality/process()
@@ -175,11 +193,16 @@
 /obj/machinery/computer/abnormality/proc/qliphoth_meltdown_effect()
 	meltdown = FALSE
 	update_icon()
-	datum_reference.qliphoth_change(-9)
-	if((datum_reference.qliphoth_meter_max > 0) && (datum_reference.qliphoth_meter <= 0))
-		visible_message("<span class='danger'>Warning! Qliphoth level reduced to 0!")
-		playsound(src, 'sound/effects/alertbeep.ogg', 50, FALSE)
+	datum_reference.qliphoth_change(-999)
 	return TRUE
+
+// Scrambles work types for this specific console
+/obj/machinery/computer/abnormality/proc/Scramble()
+	var/list/normal_works = shuffle(list(ABNORMALITY_WORK_INSTINCT, ABNORMALITY_WORK_INSIGHT, ABNORMALITY_WORK_ATTACHMENT, ABNORMALITY_WORK_REPRESSION))
+	var/list/choose_from = normal_works.Copy()
+	for(var/work in normal_works)
+		scramble_list[work] = pick(choose_from - work)
+		choose_from -= scramble_list[work]
 
 //special console just for training rabbit
 /obj/machinery/computer/abnormality/training_rabbit

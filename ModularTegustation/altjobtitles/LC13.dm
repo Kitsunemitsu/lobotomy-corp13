@@ -6,8 +6,8 @@
 
 /datum/job/agent/captain
 	alt_titles = list()
-	senior_title = null
-	ultra_senior_title = null
+	senior_title = "Senior Agent Captain"
+	ultra_senior_title = "Veteran Agent Captain"
 
 /// Service
 /datum/job/assistant
@@ -15,6 +15,7 @@
 			"Training Department Clerk", "Safety Department Clerk",
 			"Welfare Department Clerk", "Disciplinary Department Clerk",
 			"Command Department Clerk", "Extraction Department Clerk", "Record Department Clerk")
+	senior_title = "Architecture Department Clerk"
 
 /datum/outfit/job/assistant/controldepartmentclerk
 	name = "Clerk (Control)"
@@ -58,3 +59,8 @@
 /datum/outfit/job/assistant/recorddepartmentclerk
 	name = "Clerk (Record)"
 	uniform = /obj/item/clothing/under/suit/lobotomy/records
+
+/datum/outfit/job/assistant/architecturedepartmentclerk
+	name = "Clerk (Architecture)"
+	uniform = /obj/item/clothing/under/suit/lobotomy/architecture
+	ears = /obj/item/radio/headset/headset_architecture

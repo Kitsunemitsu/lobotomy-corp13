@@ -13,6 +13,10 @@
 	var/end_sound = null
 	/// Reward in percents to PE upon winning ordeal. From 0 to 1
 	var/reward_percent = 0
+	/// HTML Color of the ordeal. Used by the monitors
+	var/color = COLOR_VERY_LIGHT_GRAY
+	/// If ordeal can be normally chosen
+	var/can_run = TRUE
 
 // Runs the event itself
 /datum/ordeal/proc/Run()
