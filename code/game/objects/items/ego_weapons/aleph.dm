@@ -325,7 +325,7 @@
 			icon_state = "rosewhite"
 		if(WHITE_DAMAGE)
 			damtype = PALE_DAMAGE
-			force = 40	//I'm not making this more than 40.
+			force = 50	//I'm not making this more than 50.
 			icon_state = "rosepale"
 		if(PALE_DAMAGE)
 			damtype = RED_DAMAGE
@@ -422,3 +422,4 @@
 		return
 	var/mob/living/carbon/human/H = user
 	H.physiology.damage_resistance -= 40
+

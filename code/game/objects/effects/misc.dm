@@ -97,3 +97,19 @@
 
 /obj/effect/abstract/directional_lighting
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+
+/obj/effect/remorse
+	name = "remorse nail"
+	desc = "A target warning you of incoming pain"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "remorse"
+	move_force = INFINITY
+	pull_force = INFINITY
+	generic_canpass = FALSE
+	movement_type = PHASING | FLYING
+	layer = POINT_LAYER	//We want this HIGH. SUPER HIGH. We want it so that you can absolutely, guaranteed, see exactly what is about to hit you.
+
+/obj/effect/remorse/Initialize()
+	..()
+	QDEL_IN(src, 2 SECONDS)
+
