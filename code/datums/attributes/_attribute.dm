@@ -17,6 +17,12 @@ GLOBAL_LIST_INIT(attribute_types, subtypesof(/datum/attribute))
 /datum/attribute/proc/get_level() // Returns current level of attribute + buff
 	return level + level_buff
 
+/datum/attribute/proc/get_raw_level() // Returns current level of attribute + buff
+	return level
+
+/datum/attribute/proc/get_level_buff() // Returns current level of attribute + buff
+	return level_buff
+
 /datum/attribute/proc/on_update(mob/living/carbon/user)
 	return
 
