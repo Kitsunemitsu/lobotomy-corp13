@@ -6,7 +6,7 @@
 
 /obj/structure/toolabnormality/skin/attack_hand(mob/living/carbon/human/user)
 	..()
-	if(get_level_buff(user, aPRUDENCE_ATTRIBUTE) > 100)
+	if(get_level_buff(user, PRUDENCE_ATTRIBUTE) > 100)
 		return	//You don't need any more.
 		to_chat(user, "<span class='userdanger'>You've learned all that you could.</span>")
 	user.adjust_attribute_buff(PRUDENCE_ATTRIBUTE, 10)

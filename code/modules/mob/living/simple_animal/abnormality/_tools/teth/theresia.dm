@@ -11,7 +11,6 @@
 	var/maxwinds = 6
 	var/currentwinds = 1
 	var/pulse_damage = 10
-	w_class = WEIGHT_CLASS_BULKY
 
 /obj/structure/toolabnormality/theresia/attack_hand(mob/user) //defines activator as user.
 	if(activated == 1) //turnoff
