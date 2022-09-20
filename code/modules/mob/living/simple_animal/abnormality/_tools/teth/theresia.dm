@@ -45,7 +45,7 @@
 			for(var/mob/living/carbon/human/L in range(7, get_turf(src)))
 				if(L.stat == DEAD)
 					continue
-				L.adjustSanityLoss(pulse_damage*REM)
+				L.adjustSanityLoss(pulse_damage)
 			if(prob(10))
 				visible_message("<span class='hear'>Despite the challenge, something reassures you that things will be okay.</span>")
 		currentwinds = (currentwinds + 1)
