@@ -2552,6 +2552,7 @@
 #include "code\modules\mob\living\simple_animal\abnormality\_abnormality.dm"
 #include "code\modules\mob\living\simple_animal\abnormality\_tools\tool_abnormality.dm"
 #include "code\modules\mob\living\simple_animal\abnormality\_tools\teth\skin.dm"
+#include "code\modules\mob\living\simple_animal\abnormality\_tools\teth\theresia.dm"
 #include "code\modules\mob\living\simple_animal\abnormality\_tools\zayin\mirror.dm"
 #include "code\modules\mob\living\simple_animal\abnormality\_tools\zayin\touch.dm"
 #include "code\modules\mob\living\simple_animal\abnormality\aleph\blue_star.dm"
