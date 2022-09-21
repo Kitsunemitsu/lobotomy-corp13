@@ -1,10 +1,9 @@
+//Coded by InsightfulParasite
 /obj/structure/toolabnormality/theresia
 	name = "windup music box"
 	desc = "An old ornate music box with a ballerina ontop. Carved onto the side of the music box is the phrase 'Do you remember this melody? The professor used to play this song when the students were sleepy. Happy birthday.'"
-	icon = 'ModularTegustation/Teguicons/teguitems.dmi'
 	icon_state = "theresia"
 	var/icon_active = "theresia_active"
-	var/risk_level = "TETH"
 	var/activated = 0
 	var/song_cooldown
 	var/song_cooldown_time = 10 SECONDS
