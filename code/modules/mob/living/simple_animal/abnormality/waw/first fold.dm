@@ -1,6 +1,6 @@
 //Coded by me, Kirie Saito!
-/mob/living/simple_animal/hostile/abnormality/firstfold
-	name = "First Fold to Infinity"
+/mob/living/simple_animal/hostile/abnormality/contract
+	name = "A Signed Contract"
 	desc = "A man with a flaming head sitting behind a desk."
 	icon = 'ModularTegustation/Teguicons/64x48.dmi'
 	icon_state = "firstfold"
@@ -12,6 +12,8 @@
 		ABNORMALITY_WORK_REPRESSION = list(0, 0, 50, 45, 45),
 		"Contract" = 100
 			)
+	pixel_x = -16
+	base_pixel_x = -16
 	start_qliphoth = 2
 	work_damage_amount = 10
 	work_damage_type = PALE_DAMAGE
@@ -23,20 +25,26 @@
 //	gift_type = /datum/ego_gifts/eight
 
 	var/list/spawnables = list()
+	var/list/queue = list()
 
-/mob/living/simple_animal/hostile/abnormality/firstfold/Initialize()
+/mob/living/simple_animal/hostile/abnormality/contract/Initialize()
 	. = ..()
-	//We need a list of all abnormalities that are HE level and Can breach.
+	//We need a list of all abnormalities that are TETH and HE level and Can breach.
 
-	var/list/queue = subtypesof(/mob/living/simple_animal/hostile/abnormality)
-	for(var/mob/living/simple_animal/hostile/abnormality/processing in queue)
-		if(threat_level != TETH_LEVEL || threat_level != HE_LEVEL)
-			continue
-		if(!can_breach)
-			continue
-		spawnables += processing
+	queue = subtypesof(/mob/living/simple_animal/hostile/abnormality)
+	for(var/current in queue)
+		var/mob/living/simple_animal/hostile/abnormality/processing = current
+		if(processing.threat_level == TETH_LEVEL || processing.threat_level == HE_LEVEL)
+			spawnables += processing
 
 
 //Meltdown
-/mob/living/simple_animal/hostile/abnormality/firstfold/ZeroQliphoth(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/contract/ZeroQliphoth(mob/living/carbon/human/user)
 	..()
+	// Don't need to lazylen this. If this is empty there is a SERIOUS PROBLEM.
+	var/mob/living/simple_animal/hostile/abnormality/spawning =	pick(spawnables)
+	new spawning(get_turf(src))
+	spawning.color = "#000000"	//Make it black to look cool
+	spawning.BreachEffect()
+	datum_reference.qliphoth_change(2)
+
