@@ -32,9 +32,13 @@
 	//We need a list of all abnormalities that are TETH and HE level and Can breach.
 
 	queue = subtypesof(/mob/living/simple_animal/hostile/abnormality)
-	for(var/mob/living/simple_animal/hostile/abnormality/current in queue)
-		if(current.threat_level == TETH_LEVEL || current.threat_level == HE_LEVEL)
-			spawnables += current
+	for(var/i in queue)
+		var/mob/living/simple_animal/hostile/abnormality/abno = i
+		if(!(initial(abno.can_spawn)) || !(initial(abno.can_breach)))
+			continue
+
+		if((initial(abno.threat_level)) <= HE_LEVEL)
+			spawnables += abno
 
 
 //Meltdown
