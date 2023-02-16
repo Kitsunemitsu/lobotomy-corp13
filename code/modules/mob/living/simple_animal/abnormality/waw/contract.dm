@@ -46,8 +46,10 @@
 	..()
 	// Don't need to lazylen this. If this is empty there is a SERIOUS PROBLEM.
 	var/mob/living/simple_animal/hostile/abnormality/spawning =	pick(spawnables)
-	new spawning(get_turf(src))
-	spawning.color = "#000000"	//Make it black to look cool
-	spawning.BreachEffect()
+	var/mob/living/simple_animal/hostile/abnormality/spawned = new spawning(get_turf(src))
+	spawned.BreachEffect()
+	spawned.color = "#000000"	//Make it black to look cool
+	spawned.name = "???"
+	spawned.desc = "What is that thing?"
 	datum_reference.qliphoth_change(2)
 
