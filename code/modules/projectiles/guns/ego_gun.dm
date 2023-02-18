@@ -10,20 +10,23 @@
 	slot_flags = ITEM_SLOT_BELT
 	w_class = WEIGHT_CLASS_BULKY			//No more stupid 10 egos in bag
 	var/obj/item/ammo_casing/ammo_type
-	var/list/attribute_requirements = list(
-							FORTITUDE_ATTRIBUTE = 0,
-							PRUDENCE_ATTRIBUTE = 0,
-							TEMPERANCE_ATTRIBUTE = 0,
-							JUSTICE_ATTRIBUTE = 0
-							)
+	var/list/attribute_requirements = list()
+	var/special
+	var/autofire	//In Rounds per second
 
 /obj/item/gun/ego_gun/Initialize()
 	. = ..()
 	chambered = new ammo_type(src)
+	if(autofire)
+		AddComponent(/datum/component/automatic_fire, autofire)
 
 /obj/item/gun/ego_gun/examine(mob/user)
 	. = ..()
 	. += EgoAttackInfo(user)
+	if(special)
+		. += "<span class='notice'>[special]</span>"
+	if(weapon_weight == WEAPON_HEAVY)
+		. += "<span class='notice'>This weapon requires two hands.</span>"
 	if(LAZYLEN(attribute_requirements))
 		. += "<span class='notice'>It has <a href='?src=[REF(src)];list_attributes=1'>certain requirements</a> for the wearer.</span>"
 
@@ -50,6 +53,10 @@
 /obj/item/gun/ego_gun/proc/CanUseEgo(mob/living/carbon/human/user)
 	if(!ishuman(user))
 		return FALSE
+	if(user.mind)
+		if(user.mind.assigned_role == "Sephirah") //This is an RP role
+			return FALSE
+
 	var/mob/living/carbon/human/H = user
 	for(var/atr in attribute_requirements)
 		if(attribute_requirements[atr] > get_attribute_level(H, atr))
@@ -84,3 +91,8 @@
 /obj/item/gun/ego_gun/shoot_with_empty_chamber(mob/living/user)
 	before_firing(user = user)
 	return ..()
+
+//Examine text for pistols.
+/obj/item/gun/ego_gun/pistol/examine(mob/user)
+	. = ..()
+	. += "<span class='notice'>This weapon fits in an ego weapon belt.</span>"

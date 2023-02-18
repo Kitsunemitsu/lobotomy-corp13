@@ -5,14 +5,16 @@
 	icon_state = "warden"
 	icon_living = "warden"
 	icon_dead = "warden_dead"
-	maxHealth = 1700
-	health = 1700
+	maxHealth = 2100
+	health = 2100
 	pixel_x = -8
 	base_pixel_x = -8
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0.7, WHITE_DAMAGE = 1.2, BLACK_DAMAGE = 0.4, PALE_DAMAGE = 1.5)
 
-	melee_damage_lower = 38
-	melee_damage_upper = 38
+	speed = 4
+	move_to_delay = 4
+	melee_damage_lower = 70
+	melee_damage_upper = 70
 	melee_damage_type = BLACK_DAMAGE
 	armortype = BLACK_DAMAGE
 	stat_attack = HARD_CRIT
@@ -60,24 +62,27 @@
 			H.dust()
 
 			// it gets faster.
-			move_to_delay -= move_to_delay*0.2
-			speed += speed*0.2
+			if(move_to_delay>1)
+				move_to_delay -= move_to_delay*0.25
+				speed += speed*0.2
+				if(melee_damage_lower > 30)
+					melee_damage_lower -=5
 
-			adjustBruteLoss(-(maxHealth*0.1)) // Heals 10% HP, fuck you that's why. Still not as bad as judgement or big bird
+			adjustBruteLoss(-(maxHealth*0.2)) // Heals 20% HP, fuck you that's why. Still not as bad as judgement or big bird
 
 			finishing = FALSE
 			icon_state = "warden"
 
-/mob/living/simple_animal/hostile/abnormality/warden/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/warden/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/warden/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
+/mob/living/simple_animal/hostile/abnormality/warden/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
 	if(get_attribute_level(user, JUSTICE_ATTRIBUTE) < 80 && get_attribute_level(user, FORTITUDE_ATTRIBUTE) < 80)
 		datum_reference.qliphoth_change(-1)
-	return ..()
+	return
 
-/mob/living/simple_animal/hostile/abnormality/warden/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/warden/BreachEffect(mob/living/carbon/human/user)
 	..()
 	GiveTarget(user)
 
@@ -97,3 +102,6 @@
 	QDEL_IN(src, 10 SECONDS)
 	..()
 
+/mob/living/simple_animal/hostile/abnormality/warden/bullet_act(obj/projectile/P)
+	visible_message("<span class='userdanger'>[src] is unfazed by \the [P]!</span>")
+	P.Destroy()

@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/bluestar
-	name = "Blue star"
+	name = "Blue Star"
 	desc = "Floating heart-shaped object. It's alive, and soon you will become one with it."
 	health = 4000
 	maxHealth = 4000
@@ -25,6 +25,7 @@
 						)
 	work_damage_amount = 16
 	work_damage_type = WHITE_DAMAGE
+	can_patrol = FALSE
 
 	wander = FALSE
 	light_color = COLOR_BLUE_LIGHT
@@ -40,8 +41,8 @@
 	gift_type =  /datum/ego_gifts/star
 
 	var/pulse_cooldown
-	var/pulse_cooldown_time = 9 SECONDS
-	var/pulse_damage = 40 // Scales with distance
+	var/pulse_cooldown_time = 12 SECONDS
+	var/pulse_damage = 120 // Scales with distance; Ideally, you shouldn't be able to outheal it with white V armor or less
 
 	var/datum/looping_sound/bluestar/soundloop
 
@@ -74,13 +75,13 @@
 
 /mob/living/simple_animal/hostile/abnormality/bluestar/proc/BluePulse()
 	pulse_cooldown = world.time + pulse_cooldown_time
-	playsound(src, 'sound/abnormalities/bluestar/pulse.ogg', 100, FALSE, 28)
+	playsound(src, 'sound/abnormalities/bluestar/pulse.ogg', 100, FALSE, 40, falloff_distance = 10)
 	var/matrix/init_transform = transform
-	animate(src, transform = transform*2, time = 3, easing = BACK_EASING|EASE_OUT)
+	animate(src, transform = transform*1.5, time = 3, easing = BACK_EASING|EASE_OUT)
 	for(var/mob/living/L in livinginrange(48, src))
 		if(faction_check_mob(L))
 			continue
-		L.apply_damage((pulse_damage - round(get_dist(src, L) * 0.75)), WHITE_DAMAGE, null, L.run_armor_check(null, WHITE_DAMAGE), spread_damage = TRUE)
+		L.apply_damage((pulse_damage - get_dist(src, L)), WHITE_DAMAGE, null, L.run_armor_check(null, WHITE_DAMAGE), spread_damage = TRUE)
 		flash_color(L, flash_color = COLOR_BLUE_LIGHT, flash_time = 70)
 		if(!ishuman(L))
 			continue
@@ -92,7 +93,7 @@
 	SLEEP_CHECK_DEATH(3)
 	animate(src, transform = init_transform, time = 5)
 
-/mob/living/simple_animal/hostile/abnormality/bluestar/attempt_work(mob/living/carbon/human/user, work_type)
+/mob/living/simple_animal/hostile/abnormality/bluestar/AttemptWork(mob/living/carbon/human/user, work_type)
 	if(get_attribute_level(user, TEMPERANCE_ATTRIBUTE) < 80)
 		datum_reference.qliphoth_change(-1)
 		playsound(src, 'sound/abnormalities/bluestar/pulse.ogg', 25, FALSE, 28)
@@ -102,8 +103,7 @@
 		return FALSE
 	return TRUE
 
-/mob/living/simple_animal/hostile/abnormality/bluestar/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
-	..()
+/mob/living/simple_animal/hostile/abnormality/bluestar/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
 	if(get_attribute_level(user, PRUDENCE_ATTRIBUTE) < 100)
 		datum_reference.qliphoth_change(-1)
 	if(user.sanity_lost)
@@ -116,11 +116,10 @@
 		QDEL_IN(user, 5)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/bluestar/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/bluestar/BreachEffect(mob/living/carbon/human/user)
 	..()
 	var/turf/T = pick(GLOB.department_centers)
 	soundloop.start()
 	forceMove(T)
 	BluePulse()
 	return
-

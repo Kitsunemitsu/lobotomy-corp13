@@ -17,6 +17,12 @@ GLOBAL_LIST_INIT(attribute_types, subtypesof(/datum/attribute))
 /datum/attribute/proc/get_level() // Returns current level of attribute + buff
 	return level + level_buff
 
+/datum/attribute/proc/get_raw_level() // Returns current level of attribute
+	return level
+
+/datum/attribute/proc/get_level_buff() // Returns current level of buff
+	return level_buff
+
 /datum/attribute/proc/on_update(mob/living/carbon/user)
 	return
 
@@ -62,6 +68,24 @@ GLOBAL_LIST_INIT(attribute_types, subtypesof(/datum/attribute))
 		return 1
 	return max(1, atr.get_level())
 
+//Getting raw level, mostly for tools.
+/proc/get_raw_level(mob/living/carbon/human/user, attribute)
+	if(!istype(user) || !attribute)
+		return 1
+	var/datum/attribute/atr = user.attributes[attribute]
+	if(!istype(atr))
+		return 1
+	return max(1, atr.get_raw_level())
+
+//Get level buff, mostly for tools
+/proc/get_level_buff(mob/living/carbon/human/user, attribute)
+	if(!istype(user) || !attribute)
+		return 1
+	var/datum/attribute/atr = user.attributes[attribute]
+	if(!istype(atr))
+		return 1
+	return max(1, atr.get_level_buff())
+
 // Attribute buffs
 
 /mob/living/carbon/human/proc/adjust_attribute_buff(attribute, addition)
@@ -78,6 +102,15 @@ GLOBAL_LIST_INIT(attribute_types, subtypesof(/datum/attribute))
 		if(!istype(atr))
 			continue
 		atr.adjust_buff(src, addition)
+	return TRUE
+
+//Set attribute levels
+/mob/living/carbon/human/proc/set_attribute_limit(attribute_set)
+	for(var/atr_type in attributes)
+		var/datum/attribute/atr = attributes[atr_type]
+		if(!istype(atr))
+			continue
+		atr.level_limit = attribute_set
 	return TRUE
 
 // Returns a combination of attributes, giving a "level" from 1 to 5
@@ -108,5 +141,21 @@ GLOBAL_LIST_INIT(attribute_types, subtypesof(/datum/attribute))
 		if(5) // 350
 			return "V"
 		if(6) // 420+
+			return "EX"
+	return "N/A"
+
+/mob/living/carbon/human/proc/get_attribute_text_level(attribute_level)
+	switch(clamp(round(attribute_level / 20), 1, 6))
+		if(-INFINITY to 1) // 20
+			return "I"
+		if(2) // 40
+			return "II"
+		if(3) // 60
+			return "III"
+		if(4) // 80
+			return "IV"
+		if(5) // 100
+			return "V"
+		if(6 to INFINITY) // 120+
 			return "EX"
 	return "N/A"

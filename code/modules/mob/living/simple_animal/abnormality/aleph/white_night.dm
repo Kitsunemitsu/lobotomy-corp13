@@ -1,7 +1,7 @@
 GLOBAL_LIST_EMPTY(apostles)
 
 /mob/living/simple_animal/hostile/abnormality/white_night
-	name = "White night"
+	name = "WhiteNight"
 	desc = "The heavens' wrath. Say your prayers, heretic, the day has come."
 	health = 15000
 	maxHealth = 15000
@@ -34,6 +34,7 @@ GLOBAL_LIST_EMPTY(apostles)
 						)
 	work_damage_amount = 14
 	work_damage_type = PALE_DAMAGE
+	can_patrol = FALSE
 
 	light_system = MOVABLE_LIGHT
 	light_color = COLOR_VERY_SOFT_YELLOW
@@ -48,13 +49,24 @@ GLOBAL_LIST_EMPTY(apostles)
 	var/holy_revival_cooldown
 	var/holy_revival_cooldown_base = 75 SECONDS
 	var/holy_revival_damage = 80 // Pale damage, scales with distance
-	var/holy_revival_range = 64
+	var/holy_revival_range = 48
 	/// List of mobs that have been hit by the revival field to avoid double effect
 	var/list/been_hit = list()
 	/// Currently spawned apostles by this mob
 	var/list/apostles = list()
 	/// List of Living People on Breach
 	var/list/heretics = list()
+
+/mob/living/simple_animal/hostile/abnormality/white_night/FearEffectText(mob/affected_mob, level = 0)
+	level = num2text(clamp(level, 1, 5))
+	var/list/result_text_list = list(
+		"1" = list("There's no room for error here.", "My legs are trembling...", "Damn, it's scary."),
+		"2" = list("GODDAMN IT!!!!", "H-Help...", "I don't want to die!"),
+		"3" = list("What am I seeing...?", "I-I can't take it...", "I can't understand..."),
+		"4" = list("So this is God...", "My existence is meaningless...", "We are petty beings..."),
+		"5" = list("Please, mercy...", "Grant us salvation...", "Let us witness in awe...")
+		)
+	return pick(result_text_list[level])
 
 /mob/living/simple_animal/hostile/abnormality/white_night/AttackingTarget()
 	return FALSE
@@ -132,7 +144,7 @@ GLOBAL_LIST_EMPTY(apostles)
 			L.adjustBruteLoss(-(holy_revival_damage * 0.75) * (L.maxHealth/100))
 			if(ishuman(L))
 				var/mob/living/carbon/human/H = L
-				H.adjustSanityLoss((holy_revival_damage * 0.75) * (H.maxSanity/100)) // It actually heals, don't worry
+				H.adjustSanityLoss(-(holy_revival_damage * 0.75) * (H.maxSanity/100))
 			L.regenerate_limbs()
 			L.regenerate_organs()
 			to_chat(L, "<span class='notice'>The holy light heals you!</span>")
@@ -170,18 +182,18 @@ GLOBAL_LIST_EMPTY(apostles)
 	sound_to_playing_players('sound/abnormalities/whitenight/apostle_bell.ogg', (25 * (3 - datum_reference.qliphoth_meter)))
 	return
 
-/mob/living/simple_animal/hostile/abnormality/white_night/success_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/white_night/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(66))
 		datum_reference.qliphoth_change(1)
 		if(prob(66)) // Rare effect, mmmm
-			revive_humans(48, "neutral") // Big heal
+			INVOKE_ASYNC(src, .proc/revive_humans, 48, "neutral") // Big heal
 	return
 
-/mob/living/simple_animal/hostile/abnormality/white_night/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/white_night/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/white_night/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/white_night/BreachEffect(mob/living/carbon/human/user)
 	holy_revival_cooldown = world.time + holy_revival_cooldown_base
 	..()
 	for(var/mob/M in GLOB.player_list)
@@ -237,6 +249,7 @@ GLOBAL_LIST_EMPTY(apostles)
 	mob_size = MOB_SIZE_HUGE
 	blood_volume = BLOOD_VOLUME_NORMAL
 	var/can_act = TRUE
+	var/death_counter = 0
 
 /mob/living/simple_animal/hostile/apostle/Move()
 	if(!can_act)
@@ -245,11 +258,13 @@ GLOBAL_LIST_EMPTY(apostles)
 
 /mob/living/simple_animal/hostile/apostle/death(gibbed)
 	invisibility = 30 // So that other mobs cannot attack them
+	death_counter = clamp(death_counter + 1, 0, 3)
 	return ..()
 
 /mob/living/simple_animal/hostile/apostle/revive(full_heal = FALSE, admin_revive = FALSE, excess_healing = 0)
 	invisibility = 0 // Visible again
 	can_act = TRUE // In case we died while performing special attack
+	adjustBruteLoss(maxHealth * (0.25 + (death_counter * 0.15)), TRUE)
 	return ..()
 
 /mob/living/simple_animal/hostile/apostle/gib(no_brain, no_organs, no_bodyparts)
@@ -285,7 +300,7 @@ GLOBAL_LIST_EMPTY(apostles)
 		ScytheAttack()
 		return
 
-	if(get_dist(src, target) <= 3 && scythe_cooldown <= world.time)
+	if(get_dist(src, target) <= scythe_range && scythe_cooldown <= world.time)
 		ScytheAttack()
 
 /mob/living/simple_animal/hostile/apostle/scythe/proc/ScytheAttack()
@@ -317,7 +332,9 @@ GLOBAL_LIST_EMPTY(apostles)
 	armortype = PALE_DAMAGE
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0.5, WHITE_DAMAGE = 0.5, BLACK_DAMAGE = 0.5, PALE_DAMAGE = 1.5)
 	scythe_range = 3
+	scythe_cooldown_time = 8 SECONDS // More often, since the damage increase was disliked.
 	scythe_damage_type = PALE_DAMAGE
+	scythe_damage = 150 // It's a big AoE unlike base game where it's smaller and as it is you straight up die unless you have 7+ Pale resist. You also have TWO of these AND WN hitting you for ~80 Pale at this range.
 
 /mob/living/simple_animal/hostile/apostle/spear
 	name = "spear apostle"

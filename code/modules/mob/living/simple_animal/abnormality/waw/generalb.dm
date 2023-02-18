@@ -20,9 +20,10 @@
 	work_damage_type = RED_DAMAGE
 	ego_list = list(
 		/datum/ego_datum/weapon/loyalty,
+		/datum/ego_datum/weapon/praetorian,
 		/datum/ego_datum/armor/loyalty
 		)
-	loot = /obj/item/clothing/suit/armor/ego_gear/praetorian
+	loot = list(/obj/item/clothing/suit/armor/ego_gear/praetorian) // Don't think it was dropping before, this should make it do so
 	//She doesn't usually breach. However, when she does, she's practically an Aleph-level threat. She's also really slow, and should pack a punch.
 	health = 3000
 	maxHealth = 3000
@@ -31,26 +32,31 @@
 	melee_damage_upper = 52
 	melee_damage_type = RED_DAMAGE
 	armortype = RED_DAMAGE
+	stat_attack = HARD_CRIT
 	//She has a Quad Artillery Cannon
 	var/fire_cooldown_time = 3 SECONDS	//She has 4 cannons, fires 4 times faster than the artillery bees
 	var/fire_cooldown
 	var/fireball_range = 30
 	var/volley_count
 
-/mob/living/simple_animal/hostile/abnormality/general_b/neutral_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/general_b/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(40))
 		datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/general_b/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/general_b/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(80))
 		datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/general_b/zero_qliphoth(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/general_b/ZeroQliphoth(mob/living/carbon/human/user)
 	if(!(status_flags & GODMODE)) // If it's breaching right now
 		return	//Yeah don't increase Qliphoth
-	spawn_bees()
+	var/artillerbee_count = 0
+	for(var/mob/living/simple_animal/hostile/artillery_bee/artillerbee in GLOB.mob_living_list)
+		artillerbee_count++
+	if(artillerbee_count < 4)
+		spawn_bees()
 	datum_reference.qliphoth_change(1)
 	return
 
@@ -76,7 +82,7 @@
 		volley_count=0
 		fire_cooldown = world.time + fire_cooldown_time*3	//Triple cooldown every 4 shells
 
-/mob/living/simple_animal/hostile/abnormality/general_b/breach_effect()
+/mob/living/simple_animal/hostile/abnormality/general_b/BreachEffect()
 	icon_state = "generalbee_breach"
 	addtimer(CALLBACK(GLOBAL_PROC, .proc/show_global_blurb, 5 SECONDS, "My queen? I hear your cries...", 25))
 	SLEEP_CHECK_DEATH(80)
@@ -109,6 +115,7 @@
 	icon_state = "soldier_bee"
 	icon_living = "soldier_bee"
 	base_pixel_x = -8
+	pixel_x = -8
 	health = 450
 	maxHealth = 450
 	melee_damage_type = RED_DAMAGE
@@ -142,6 +149,10 @@
 	base_pixel_y = -8
 	health = 200
 	maxHealth = 200
+	damage_coeff = list(RED_DAMAGE = 1, WHITE_DAMAGE = 1, BLACK_DAMAGE = 1, PALE_DAMAGE = 1) // Just so it's declared.
+	del_on_death = TRUE
+	deathsound = 'sound/abnormalities/bee/death.ogg'
+	speak_emote = list("buzzes")
 
 	var/fire_cooldown_time = 10 SECONDS
 	var/fire_cooldown
@@ -167,7 +178,8 @@
 		if(L.stat == DEAD)
 			continue
 		targets += L
-	new /obj/effect/beeshell(get_turf(pick(targets)))
+	if(targets.len > 0)
+		new /obj/effect/beeshell(get_turf(pick(targets)))
 
 /obj/effect/beeshell
 	name = "bee shell"
@@ -178,24 +190,24 @@
 	pull_force = INFINITY
 	generic_canpass = FALSE
 	movement_type = PHASING | FLYING
-	var/boom_damage = 100 //Half Red, Half Black
+	var/boom_damage = 160 //Half Red, Half Black
 	layer = POINT_LAYER	//We want this HIGH. SUPER HIGH. We want it so that you can absolutely, guaranteed, see exactly what is about to hit you.
 
 /obj/effect/beeshell/Initialize()
 	..()
-	addtimer(CALLBACK(src, .proc/explode), 2 SECONDS)
+	addtimer(CALLBACK(src, .proc/explode), 3.5 SECONDS)
 
 //Smaller Scorched Girl bomb
 /obj/effect/beeshell/proc/explode()
 	playsound(get_turf(src), 'sound/effects/explosion2.ogg', 50, 0, 8)
 	for(var/mob/living/carbon/human/H in view(2, src))
-		H.apply_damage(boom_damage, RED_DAMAGE, null, H.run_armor_check(null, RED_DAMAGE), spread_damage = TRUE)
-		H.apply_damage(boom_damage, BLACK_DAMAGE, null, H.run_armor_check(null, BLACK_DAMAGE), spread_damage = TRUE)
+		H.apply_damage(boom_damage*0.5, RED_DAMAGE, null, H.run_armor_check(null, RED_DAMAGE), spread_damage = TRUE)
+		H.apply_damage(boom_damage*0.5, BLACK_DAMAGE, null, H.run_armor_check(null, BLACK_DAMAGE), spread_damage = TRUE)
 		if(H.health < 0)
 			H.gib()
 	new /obj/effect/temp_visual/explosion(get_turf(src))
 	var/datum/effect_system/smoke_spread/S = new
-	S.set_up(5, get_turf(src))	//Make the smoke bigger
+	S.set_up(4, get_turf(src))	//Make the smoke bigger
 	S.start()
 	qdel(src)
 

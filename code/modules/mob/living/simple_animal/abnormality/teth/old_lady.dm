@@ -28,7 +28,7 @@
 
 /mob/living/simple_animal/hostile/abnormality/old_lady/Life()
 	. = ..()
-	if(meltdown_cooldown < world.time)
+	if(meltdown_cooldown < world.time && !datum_reference.working) // Doesn't decrease while working but will afterwards
 		meltdown_cooldown = world.time + meltdown_cooldown_time
 		datum_reference.qliphoth_change(-1)
 
@@ -38,18 +38,18 @@
 			if(prob(70))
 				new /obj/effect/solitude (T)
 
-/mob/living/simple_animal/hostile/abnormality/old_lady/attempt_work(mob/living/carbon/human/user, work_type)
+/mob/living/simple_animal/hostile/abnormality/old_lady/AttemptWork(mob/living/carbon/human/user, work_type)
 	if(work_type == "Clear Solitude" && datum_reference.qliphoth_meter == 0)
 		return TRUE
 	else if(datum_reference.qliphoth_meter == 0 || work_type == "Clear Solitude")
 		return FALSE
 	return TRUE
 
-/mob/living/simple_animal/hostile/abnormality/old_lady/work_complete(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/old_lady/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	if(work_type == "Clear Solitude")
 		datum_reference.qliphoth_change(4)
 		icon_state = "old_lady"
-	return ..()
+	return
 
 //The Effect
 /obj/effect/solitude

@@ -1,7 +1,7 @@
 #define STATUS_EFFECT_CHANGE /datum/status_effect/we_can_change_anything
 /mob/living/simple_animal/hostile/abnormality/we_can_change_anything
-	name = "We can change anything"
-	desc = "A human sized container with spikes inside it, you shouldn't enter it"
+	name = "We Can Change Anything"
+	desc = "A human sized container with spikes inside it. You shouldn't enter it"
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "wecanchange"
 	maxHealth = 1000
@@ -13,7 +13,7 @@
 		ABNORMALITY_WORK_ATTACHMENT = list(40, 50, 55, 60, 60),
 		ABNORMALITY_WORK_REPRESSION = list(55, 60, 65, 70, 75)
 		)
-	work_damage_amount = 4
+	work_damage_amount = 0
 	work_damage_type = RED_DAMAGE
 	max_boxes = 10
 
@@ -23,21 +23,27 @@
 		)
 
 	gift_type =  /datum/ego_gifts/change
+	gift_message = "Your heart beats with new vigor."
 
-/mob/living/simple_animal/hostile/abnormality/we_can_change_anything/work_complete(mob/living/carbon/human/user, work_type, pe)
-	user.apply_damage(100, RED_DAMAGE, null, user.run_armor_check(null, RED_DAMAGE)) // say goodbye to your kneecaps chucklenuts!
+
+/mob/living/simple_animal/hostile/abnormality/we_can_change_anything/Worktick(mob/living/carbon/human/user)
+	user.apply_damage(5, RED_DAMAGE, null, user.run_armor_check(null, RED_DAMAGE)) // say goodbye to your kneecaps chucklenuts!
+
+/mob/living/simple_animal/hostile/abnormality/we_can_change_anything/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	user.apply_status_effect(STATUS_EFFECT_CHANGE)
-	..()
+	return
 
 /datum/status_effect/we_can_change_anything
 	id = "change"
 	status_type = STATUS_EFFECT_UNIQUE
-	duration = 3000		//Lasts 5 mins 
+	duration = 3000 //Lasts 5 mins
 	alert_type = /atom/movable/screen/alert/status_effect/we_can_change_anything
 
 /atom/movable/screen/alert/status_effect/we_can_change_anything
 	name = "The desire to change"
-	desc = "Your lost kneecaps have made you stronger, enjoy."
+	desc = "Your painful experience has made you more resilient to RED damage."
+	icon = 'ModularTegustation/Teguicons/status_sprites.dmi'
+	icon_state = "change"
 
 /datum/status_effect/we_can_change_anything/on_apply()
 	. = ..()

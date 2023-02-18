@@ -143,13 +143,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	keyslot = new /obj/item/encryptionkey/headset_training
 
 /obj/item/radio/headset/headset_command
-	name = "command radio headset"
+	name = "central radio headset"
 	desc = "This is used by the central command department."
 	icon_state = "eng_headset"
 	keyslot = new /obj/item/encryptionkey/headset_command
-
-/obj/item/radio/headset/headset_command/agent
-	keyslot = null
 
 /obj/item/radio/headset/headset_welfare
 	name = "welfare radio headset"
@@ -190,6 +187,12 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 /obj/item/radio/headset/heads
 	command = TRUE
 	keyslot = new /obj/item/encryptionkey/headset_architecture
+
+/obj/item/radio/headset/agent_lieutenant
+	name = "\proper the lieutenant's headset"
+	desc = "A headset used by agents in Lobotomy Corporation who have earned the rank of captain."
+	icon_state = "com_headset"
+	keyslot = new /obj/item/encryptionkey/agent_lieutenant
 
 /obj/item/radio/headset/heads/agent_captain
 	name = "\proper the captain's headset"

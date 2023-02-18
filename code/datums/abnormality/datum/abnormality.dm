@@ -44,6 +44,16 @@
 	var/max_understanding = 0
 	/// A list of performed works on it
 	var/list/work_logs = list()
+	/*
+	* Moved this variable from work Console for a two reasons
+	* First, this allows both the console AND the abnormality to check on the current working status. Useful overall.
+	* Second, there's no real reason for it to NOT be here unless we SOMEHOW, for SOME REASON, get duplicate abnormalities. Even then I don't know if that'd conflict.
+	*/
+	var/working = FALSE
+	///a list of variable the abno wants to remember after death
+	var/list/transferable_var
+	///if the abno spawns with a slime radio or not
+	var/abno_radio = FALSE
 
 /datum/abnormality/New(obj/effect/landmark/abnormality_spawn/new_landmark, mob/living/simple_animal/hostile/abnormality/new_type = null)
 	if(!istype(new_landmark))
@@ -56,6 +66,17 @@
 	desc = initial(abno_path.desc)
 	RespawnAbno()
 	FillEgoList()
+
+/datum/abnormality/Destroy()
+	SSlobotomy_corp.all_abnormality_datums -= src
+	for(var/datum/ego_datum/ED in ego_datums)
+		qdel(ED)
+	QDEL_NULL(landmark)
+	QDEL_NULL(current)
+	ego_datums = null
+	landmark = null
+	current = null
+	..()
 
 /datum/abnormality/proc/RespawnAbno()
 	if(!ispath(abno_path))
@@ -96,6 +117,9 @@
 	if (understanding == max_understanding && max_understanding > 0)
 		current.gift_chance *= 1.5
 	overload_chance_limit = overload_chance_amount * 10
+	if(abno_radio)
+		current.AbnoRadio()
+	current.PostSpawn()
 
 /datum/abnormality/proc/FillEgoList()
 	if(!current || !current.ego_list)
@@ -106,8 +130,9 @@
 		GLOB.ego_datums["[ED.name][ED.item_category]"] = ED
 	return TRUE
 
-/datum/abnormality/proc/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
-	current.work_complete(user, work_type, pe, work_time) // Cross-referencing gone wrong
+
+/datum/abnormality/proc/work_complete(mob/living/carbon/human/user, work_type, pe, work_time, was_melting, canceled)
+	current.WorkComplete(user, work_type, pe, work_time, canceled) // Cross-referencing gone wrong
 	var/user_job_title = "Unidentified Employee"
 	var/obj/item/card/id/W = user.get_idcard()
 	if(istype(W))
@@ -145,27 +170,39 @@
 	var/attribute_given = clamp(((maximum_attribute_level / (user_attribute_level * 0.25)) * (0.25 + (pe / max_boxes))), 0, 16)
 	if((user_attribute_level + attribute_given) >= maximum_attribute_level) // Already/Will be at maximum.
 		attribute_given = max(0, maximum_attribute_level - user_attribute_level)
+	if(attribute_given == 0)
+		if(was_melting)
+			attribute_given = 2 //pity stats on meltdowns
+		else
+			to_chat(user, "<span class='warning'>You don't feel like you've learned anything from this!</span>")
 	user.adjust_attribute_level(attribute_type, attribute_given)
 
 /datum/abnormality/proc/qliphoth_change(amount, user)
 	var/pre_qlip = qliphoth_meter
 	qliphoth_meter = clamp(qliphoth_meter + amount, 0, qliphoth_meter_max)
 	if((qliphoth_meter_max > 0) && (qliphoth_meter <= 0) && (pre_qlip > 0))
-		current?.zero_qliphoth(user)
+		current?.ZeroQliphoth(user)
 		current?.visible_message("<span class='danger'>Warning! Qliphoth level reduced to 0!")
 		playsound(get_turf(current), 'sound/effects/alertbeep.ogg', 50, FALSE)
 		return
 	if(pre_qlip != qliphoth_meter)
-		current?.OnQliphothChange(user)
+		if(pre_qlip < qliphoth_meter) // Alerts on change of counter. It's just nice to know instead of inspecting the console every time. Also helps for those nearby if something goes to shit.
+			current?.visible_message("<span class='notice'>Qliphoth level increased by [qliphoth_meter-pre_qlip]!</span>")
+			playsound(get_turf(current), 'sound/machines/synth_yes.ogg', 50, FALSE)
+		else
+			current?.visible_message("<span class='warning'>Qliphoth level decreased by [pre_qlip-qliphoth_meter]!</span>")
+			playsound(get_turf(current), 'sound/machines/synth_no.ogg', 50, FALSE)
+		current?.OnQliphothChange(user, amount)
 
 /datum/abnormality/proc/get_work_chance(workType, mob/living/carbon/human/user)
 	if(!istype(user))
 		return 0
 	var/acquired_chance = available_work[workType]
 	if(islist(acquired_chance))
-		acquired_chance = acquired_chance[get_user_level(user)]
+		var/work_level = clamp(round(get_attribute_level(user, WORK_TO_ATTRIBUTE[workType])/20), 1, 5)
+		acquired_chance = acquired_chance[work_level]
 	if(current)
-		acquired_chance = current.work_chance(user, acquired_chance)
+		acquired_chance = current.WorkChance(user, acquired_chance, workType)
 	switch (workType)
 		if (ABNORMALITY_WORK_INSTINCT)
 			acquired_chance += user.physiology.instinct_success_mod

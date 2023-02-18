@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/training_rabbit
-	name = "Standard training-dummy rabbit"
+	name = "Standard Training-Dummy Rabbit"
 	desc = "A rabbit-like training dummy. Should be completely harmless."
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "training_rabbit"
@@ -23,13 +23,26 @@
 	can_spawn = FALSE // Normally doesn't appear
 	//ego_list = list(datum/ego_datum/weapon/training, datum/ego_datum/armor/training)
 	gift_type =  /datum/ego_gifts/standard
+	can_patrol = FALSE
 
-/mob/living/simple_animal/hostile/abnormality/training_rabbit/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/training_rabbit/Initialize()	//1 in 100 chance for bunny girl waifu
+	. = ..()
+	if(prob(1))
+		icon = 'ModularTegustation/Teguicons/64x64.dmi'
+		icon_state = "Bungal"
+		pixel_x = -16
+		gift_type =  /datum/ego_gifts/bunny
+
+/mob/living/simple_animal/hostile/abnormality/training_rabbit/BreachEffect(mob/living/carbon/human/user)
 	..()
 	GiveTarget(user)
 	addtimer(CALLBACK(src, .proc/kill_dummy), 30 SECONDS)
+	if(icon_state == "Bungal")
+		icon = 'ModularTegustation/Teguicons/64x96.dmi'
+		icon_state = "Bungal_breach"
+		pixel_x = -16
 
-/mob/living/simple_animal/hostile/abnormality/training_rabbit/work_complete(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/training_rabbit/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	..()
 	if(work_type == ABNORMALITY_WORK_REPRESSION)
 		datum_reference.qliphoth_change(-1)
@@ -37,4 +50,3 @@
 
 /mob/living/simple_animal/hostile/abnormality/training_rabbit/proc/kill_dummy()
 	QDEL_NULL(src)
-

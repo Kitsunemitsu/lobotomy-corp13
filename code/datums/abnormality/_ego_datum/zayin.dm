@@ -9,7 +9,7 @@
 
 // You are bald - Tough
 /datum/ego_datum/weapon/tough
-	item_path = /obj/item/gun/ego_gun/tough
+	item_path = /obj/item/gun/ego_gun/pistol/tough
 	cost = 12
 
 /datum/ego_datum/armor/tough
@@ -18,7 +18,7 @@
 
 // Wellcheers vending machine - Soda
 /datum/ego_datum/weapon/soda
-	item_path = /obj/item/gun/ego_gun/soda
+	item_path = /obj/item/gun/ego_gun/pistol/soda
 	cost = 12
 
 /datum/ego_datum/armor/soda
@@ -46,8 +46,8 @@
 // We can change anything - Change
 /datum/ego_datum/weapon/change
 	item_path = /obj/item/ego_weapon/change
-	cost = 20
+	cost = 12
 
 /datum/ego_datum/armor/change
 	item_path = /obj/item/clothing/suit/armor/ego_gear/change
-	cost = 20
+	cost = 12

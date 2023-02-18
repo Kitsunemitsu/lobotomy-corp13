@@ -1,6 +1,6 @@
 // A vending machine that is a mob type. My descent into madness continues.
 /mob/living/simple_animal/hostile/abnormality/wellcheers
-	name = "Wellcheers vending machine"
+	name = "Wellcheers Vending Machine"
 	desc = "A vending machine selling cans of \"Wellcheers\"."
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "wellcheers_vendor"
@@ -22,14 +22,16 @@
 		/datum/ego_datum/armor/soda
 		)
 	gift_type = /datum/ego_gifts/soda
-/mob/living/simple_animal/hostile/abnormality/wellcheers/success_effect(mob/living/carbon/human/user, work_type, pe)
+	gift_message = "You feel like you've been doing this your whole life."
+
+/mob/living/simple_animal/hostile/abnormality/wellcheers/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	var/obj/item/dropped_can
 	switch(work_type)
 		if(ABNORMALITY_WORK_INSTINCT)
 			dropped_can = /obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_red
 		if(ABNORMALITY_WORK_INSIGHT)
 			dropped_can = /obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_white
-		if(ABNORMALITY_WORK_ATTACHMENT, ABNORMALITY_WORK_REPRESSION)
+		else
 			dropped_can = /obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_purple
 	if(!dropped_can)
 		return
@@ -40,7 +42,7 @@
 	return
 
 // Death!
-/mob/living/simple_animal/hostile/abnormality/wellcheers/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/wellcheers/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	for(var/turf/open/T in view(7, src))
 		new /obj/effect/temp_visual/water_waves(T)
 	playsound(get_turf(src), 'sound/abnormalities/wellcheers/ability.ogg', 75, 0)

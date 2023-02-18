@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/fairy_festival
-	name = "Fairy festival"
+	name = "Fairy Festival"
 	desc = "The abnormality is similar to a fairy, having two pairs of wings and a small body. The small fairies around it act as a cluster."
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "fairy"
@@ -23,6 +23,8 @@
 		/datum/ego_datum/armor/wingbeat
 		)
 	gift_type =  /datum/ego_gifts/wingbeat
+	gift_message = "Fairy Dust covers your hands..."
+
 	var/heal_duration = 90 SECONDS
 	var/heal_amount = 0.02
 	var/heal_cooldown = 2 SECONDS
@@ -34,11 +36,11 @@
 		if(heal_cooldown <= world.time)
 			P.adjustBruteLoss(-heal_amount*P.getMaxHealth())
 			P.adjustFireLoss(-heal_amount*P.getMaxHealth())
-			P.adjustSanityLoss(heal_amount*P.getMaxSanity())
+			P.adjustSanityLoss(-heal_amount*P.getMaxSanity())
 	heal_cooldown = (world.time + heal_cooldown_base)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/fairy_festival/success_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/fairy_festival/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	if(user.stat != DEAD && istype(user))
 		if(user in protected_people)
 			return
@@ -50,8 +52,8 @@
 		addtimer(CALLBACK(src, .proc/FairyEnd, user), heal_duration)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/fairy_festival/neutral_effect(mob/living/carbon/human/user, work_type, pe)
-	success_effect(user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/fairy_festival/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
+	SuccessEffect(user, work_type, pe)
 	return
 
 /mob/living/simple_animal/hostile/abnormality/fairy_festival/Life()

@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile/abnormality/big_bird
-	name = "Big bird"
+	name = "Big Bird"
 	desc = "A large, many-eyed bird that patrols the dark forest with an everlasting lamp. \
-	Unlike regular birds, it lacks wings and has long arms instead with which it can pick things up."
+	Unlike regular birds, it lacks wings and instead has long arms with which it can pick things up."
 	icon = 'ModularTegustation/Teguicons/64x64.dmi'
 	icon_state = "big_bird"
 	icon_living = "big_bird"
@@ -32,6 +32,10 @@
 	work_damage_amount = 10
 	work_damage_type = BLACK_DAMAGE
 
+	light_color = COLOR_ORANGE
+	light_range = 5
+	light_power = 7
+
 	// This stuff is only done to non-humans and objects
 	melee_damage_type = BLACK_DAMAGE
 	armortype = BLACK_DAMAGE
@@ -50,14 +54,12 @@
 	var/bite_cooldown_time = 8 SECONDS
 	var/hypnosis_cooldown
 	var/hypnosis_cooldown_time = 16 SECONDS
-	/// How many people died at the moment? When it hits 3 - reduce qliphoth and reset counter to 0.
-	var/death_counter = 0
 
 /datum/action/innate/abnormality_attack/hypnosis
 	name = "Hypnosis"
 	icon_icon = 'icons/obj/wizard.dmi'
 	button_icon_state = "magicm"
-	chosen_message = "<span class='colossus'>You will now put random human near you to sleep.</span>"
+	chosen_message = "<span class='colossus'>You will now stun random humans near you.</span>"
 	chosen_attack_num = 1
 
 /mob/living/simple_animal/hostile/abnormality/big_bird/OpenFire()
@@ -116,36 +118,37 @@
 		return
 	hypnosis_cooldown = world.time + hypnosis_cooldown_time
 	playsound(get_turf(src), 'sound/abnormalities/bigbird/hypnosis.ogg', 50, 1, 2)
-	for(var/mob/living/carbon/C in view(7, src))
+	for(var/mob/living/carbon/C in view(8, src))
 		if(faction_check_mob(C, FALSE))
 			continue
 		if(!CanAttack(C))
 			continue
 		if(prob(66))
-			to_chat(C, "<span class='warning'>You feel sleepy...</span>")
-			C.drowsyness += 4
-			addtimer(CALLBACK (C, .mob/living/proc/AdjustSleeping, 2 SECONDS), 4 SECONDS)
+			to_chat(C, "<span class='warning'>You feel tired...</span>")
+			C.blur_eyes(5)
+			addtimer(CALLBACK (C, .mob/proc/blind_eyes, 2), 2 SECONDS)
+			addtimer(CALLBACK (C, .mob/living/proc/Stun, 2 SECONDS), 2 SECONDS)
+			var/new_overlay = mutable_appearance('ModularTegustation/Teguicons/tegu_effects.dmi', "enchanted", -HALO_LAYER)
+			C.add_overlay(new_overlay)
+			addtimer(CALLBACK (C, .atom/proc/cut_overlay, new_overlay), 4 SECONDS)
 
 /mob/living/simple_animal/hostile/abnormality/big_bird/proc/on_mob_death(datum/source, mob/living/died, gibbed)
 	SIGNAL_HANDLER
-	if(!(status_flags & GODMODE)) // If it's breaching right now
+	if(!IsContained()) // If it's breaching right now
 		return FALSE
 	if(!ishuman(died))
 		return FALSE
-	if(!died.ckey)
+	if(died.z != z)
 		return FALSE
-	death_counter += 1
-	if(death_counter >= 3)
-		death_counter = 0
-		datum_reference.qliphoth_change(-1)
+	if(!died.mind)
+		return FALSE
+	datum_reference.qliphoth_change(-1) // One death reduces it
 	return TRUE
 
-/mob/living/simple_animal/hostile/abnormality/big_bird/success_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/big_bird/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/big_bird/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/big_bird/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
-
-

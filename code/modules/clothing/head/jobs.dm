@@ -173,6 +173,11 @@
 	name = "syndicate beret"
 	desc = "A black beret with thick armor padding inside. Stylish and robust."
 
+/obj/item/clothing/head/hos/agent
+	name = "agent captain cap"
+	desc = "A rather expensive cap worn by agent captains. A show of who's the best"
+	armor = list()
+
 /obj/item/clothing/head/zwei
 	name = "zwei association hat"
 	desc = "It's a special armored hat issued to those who reach the rank of Zwei Association Captain. Clean and professional."
@@ -250,10 +255,9 @@
 		speech_args[SPEECH_MESSAGE] = message
 
 /obj/item/clothing/head/beret/sec
-	name = "security beret"
-	desc = "A robust beret with the security insignia emblazoned on it. Uses reinforced fabric to offer sufficient protection."
+	name = "agent beret"
+	desc = "A robust beret with the lobotomy corporation insignia emblazoned on it."
 	icon_state = "beret_badge"
-	armor = list(MELEE = 40, BULLET = 30, LASER = 30, ENERGY = 40, BOMB = 25, BIO = 0, RAD = 0, FIRE = 20, ACID = 50, WOUND = 4)
 	strip_delay = 60
 	dog_fashion = null
 

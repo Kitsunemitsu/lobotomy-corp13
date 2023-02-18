@@ -452,18 +452,18 @@
 	overdose_threshold = 25
 
 /datum/reagent/medicine/sal_acid/on_mob_life(mob/living/M)
-	if(M.getBruteLoss() > 25)
+	if(overdosed)
+		return
+	var/mob/living/carbon/human/H = M
+	if(HAS_TRAIT(H, TRAIT_HEALING)) // Used for "no medipens" challenge quirk
+		holder.remove_reagent(/datum/reagent/medicine/sal_acid, 1)
+		return
+	if(M.getBruteLoss() > (M.maxHealth*0.25))
 		M.adjustBruteLoss(-4*REM, 0)
 	else
-		M.adjustBruteLoss(-0.5*REM, 0)
+		M.adjustBruteLoss(-1*REM, 0)
 	..()
 	. = 1
-
-/datum/reagent/medicine/sal_acid/overdose_process(mob/living/M)
-	if(M.getBruteLoss()) //It only makes existing bruises worse
-		M.adjustBruteLoss(4.5*REM, FALSE, FALSE, BODYPART_ORGANIC) // it's going to be healing either 4 or 0.5
-		. = 1
-	..()
 
 /datum/reagent/medicine/salbutamol
 	name = "Salbutamol"
@@ -498,28 +498,6 @@
 	REMOVE_TRAIT(L, TRAIT_STUNRESISTANCE, type)
 	..()
 
-/datum/reagent/medicine/mental_stabilizator
-	name = "Mental Stabilizator"
-	description = "Heals any potential issues with mental state of the patient."
-	reagent_state = LIQUID
-	color = "#CCFFFF"
-	metabolization_rate = 0.5 * REAGENTS_METABOLISM
-	overdose_threshold = 25
-
-/datum/reagent/medicine/mental_stabilizator/on_mob_life(mob/living/M)
-	if(!ishuman(M))
-		return
-	var/mob/living/carbon/human/H = M
-	H.adjustSanityLoss(5*REM) // That's healing
-	..()
-	. = 1
-
-/datum/reagent/medicine/sal_acid/overdose_process(mob/living/M)
-	if(M.getBruteLoss()) //It only makes existing bruises worse
-		M.adjustBruteLoss(4.5*REM, FALSE, FALSE, BODYPART_ORGANIC) // it's going to be healing either 4 or 0.5
-		. = 1
-	..()
-
 /datum/reagent/medicine/ephedrine/on_mob_life(mob/living/M)
 	if(prob(20) && iscarbon(M))
 		var/obj/item/I = M.get_active_held_item()
@@ -547,6 +525,27 @@
 		M.losebreath++
 		. = 1
 	return TRUE
+
+/datum/reagent/medicine/mental_stabilizator //Classic sanity restoration medicine.
+	name = "Mental Stabilizator"
+	description = "Heals any potential issues with mental state of the patient."
+	reagent_state = LIQUID
+	color = "#CCFFFF"
+	metabolization_rate = 0.5 * REAGENTS_METABOLISM
+	overdose_threshold = 25
+
+/datum/reagent/medicine/mental_stabilizator/on_mob_life(mob/living/M)
+	if(!ishuman(M))
+		return
+	if(overdosed)
+		return
+	var/mob/living/carbon/human/H = M
+	if(HAS_TRAIT(H, TRAIT_HEALING)) // Used for "no medipens" challenge quirk
+		holder.remove_reagent(/datum/reagent/medicine/mental_stabilizator, 1)
+		return
+	H.adjustSanityLoss(-5*REM) // That's healing 5 units.
+	..()
+	. = 1
 
 /datum/reagent/medicine/diphenhydramine
 	name = "Diphenhydramine"
@@ -682,6 +681,10 @@
 
 /datum/reagent/medicine/epinephrine/on_mob_life(mob/living/M)
 	. = TRUE
+	var/mob/living/carbon/human/H = M
+	if(HAS_TRAIT(H, TRAIT_HEALING)) // Used for "no medipens" challenge quirk
+		holder.remove_reagent(/datum/reagent/medicine/epinephrine, 1)
+		return
 	if(holder.has_reagent(/datum/reagent/toxin/lexorin))
 		holder.remove_reagent(/datum/reagent/toxin/lexorin, 2)
 		holder.remove_reagent(/datum/reagent/medicine/epinephrine, 1)
@@ -1193,9 +1196,9 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		C.disgust = max(0, C.disgust-6)
-	var/datum/component/mood/mood = M.GetComponent(/datum/component/mood)
-	if(mood != null && mood.sanity <= SANITY_NEUTRAL) // only take effect if in negative sanity and then...
-		mood.setSanity(min(mood.sanity+5, SANITY_NEUTRAL)) // set minimum to prevent unwanted spiking over neutral
+	if(prob(10))
+		var/mob/living/carbon/human/H = M
+		H.adjustSanityLoss(-1*REM) // That's healing
 	..()
 	. = 1
 

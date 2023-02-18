@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/silentorchestra
-	name = "Silent orchestra"
+	name = "The Silent Orchestra"
 	desc = "From break and ruin, the most beautiful performance begins."
 	health = 4000
 	maxHealth = 4000
@@ -18,6 +18,7 @@
 						)
 	work_damage_amount = 16
 	work_damage_type = WHITE_DAMAGE
+	can_patrol = FALSE
 
 	wander = FALSE
 	light_system = MOVABLE_LIGHT
@@ -31,9 +32,9 @@
 		)
 	gift_type =  /datum/ego_gifts/dacapo
 	/// Range of the damage
-	var/symphony_range = 18
-	/// Amount of white damage
-	var/symphony_damage = 8
+	var/symphony_range = 20
+	/// Amount of white damage every tick
+	var/symphony_damage = 10
 	/// When to perform next movement
 	var/next_movement_time
 	/// Current movement
@@ -64,7 +65,7 @@
 		for(var/mob/living/L in livinginrange(symphony_range, get_turf(src)))
 			if(faction_check_mob(L))
 				continue
-			var/dealt_damage = max(4, symphony_damage - round(get_dist(src, L) * 0.2))
+			var/dealt_damage = max(6, symphony_damage - round(get_dist(src, L) * 0.1))
 			L.apply_damage(dealt_damage, WHITE_DAMAGE, null, L.run_armor_check(null, WHITE_DAMAGE), spread_damage = TRUE)
 
 	if(world.time >= next_movement_time) // Next movement
@@ -85,13 +86,13 @@
 			if(3)
 				next_movement_time = world.time + 11.5 SECONDS
 				damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0, WHITE_DAMAGE = 1, BLACK_DAMAGE = 0, PALE_DAMAGE = 0)
-				symphony_damage = 15
+				symphony_damage = 18
 				movement_volume = 3 // No more tinnitus
 				spawn_performer(1, EAST)
 			if(4)
 				next_movement_time = world.time + 23 SECONDS
 				damage_coeff = list(BRUTE = 1, RED_DAMAGE = 1, WHITE_DAMAGE = 0, BLACK_DAMAGE = 0, PALE_DAMAGE = 0)
-				symphony_damage = 10
+				symphony_damage = 12
 				spawn_performer(2, EAST)
 			if(5)
 				next_movement_time = world.time + 999 SECONDS // Never
@@ -126,15 +127,15 @@
 	performers += O
 	return
 
-/mob/living/simple_animal/hostile/abnormality/silentorchestra/success_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/silentorchestra/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/silentorchestra/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/silentorchestra/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/silentorchestra/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/silentorchestra/BreachEffect(mob/living/carbon/human/user)
 	..()
 	var/turf/T = pick(GLOB.department_centers)
 	forceMove(T)

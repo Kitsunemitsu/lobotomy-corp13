@@ -13,8 +13,8 @@
 	health = 250
 	speed = 4
 	move_to_delay = 5
-	butcher_results = list(/obj/item/food/meat/slab/human/mutant/fruit = 1)
-	guaranteed_butcher_results = list(/obj/item/food/meat/slab/human/mutant/fruit = 1)
+	butcher_results = list(/obj/item/food/meat/slab/fruit = 1)
+	guaranteed_butcher_results = list(/obj/item/food/meat/slab/fruit = 1)
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 1, WHITE_DAMAGE = 1.5, BLACK_DAMAGE = 1, PALE_DAMAGE = 1)
 	blood_volume = BLOOD_VOLUME_NORMAL
 
@@ -71,7 +71,7 @@
 
 /mob/living/simple_animal/hostile/ordeal/violet_monolith/Initialize()
 	..()
-	next_pulse = world.time + 20 SECONDS
+	next_pulse = world.time + 30 SECONDS
 	addtimer(CALLBACK(src, .proc/FallDown))
 
 /mob/living/simple_animal/hostile/ordeal/violet_monolith/CanAttack(atom/the_target)
@@ -135,5 +135,5 @@
 			potential_computers += A
 	if(LAZYLEN(potential_computers))
 		CA = pick(potential_computers)
-		CA.datum_reference.qliphoth_change(pick(-1, -2))
+		CA.datum_reference.qliphoth_change(-1)
 	icon_state = "violet_noon_attack"

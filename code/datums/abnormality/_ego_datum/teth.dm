@@ -7,9 +7,15 @@
 	item_path = /obj/item/clothing/suit/armor/ego_gear/training
 	cost = 20
 
-// Punishing bird - Beak
+// Punishing bird - Beak & Beak MK2
 /datum/ego_datum/weapon/beak
+	item_category = "Weapon (SMG)"
 	item_path = /obj/item/gun/ego_gun/beak
+	cost = 20
+
+/datum/ego_datum/weapon/beakmagnum
+	item_category = "Weapon (Pistol)"
+	item_path = /obj/item/gun/ego_gun/pistol/beakmagnum
 	cost = 20
 
 /datum/ego_datum/armor/beak
@@ -45,7 +51,7 @@
 
 // Dingle-Dangle - Dear Lutemia
 /datum/ego_datum/weapon/lutemia
-	item_path = /obj/item/ego_weapon/lutemia
+	item_path = /obj/item/ego_weapon/shield/lutemia
 	cost = 20
 
 /datum/ego_datum/armor/lutemia
@@ -77,7 +83,7 @@
 
 //Bloodbath - Wrist Cutter
 /datum/ego_datum/weapon/wrist
-	item_path = /obj/item/ego_weapon/wrist
+	item_path = /obj/item/ego_weapon/mini/wrist
 	cost = 20
 
 /datum/ego_datum/armor/wrist
@@ -86,9 +92,95 @@
 
 // Old Lady - Solitude
 /datum/ego_datum/weapon/solitude
-	item_path = /obj/item/gun/ego_gun/solitude
+	item_path = /obj/item/gun/ego_gun/pistol/solitude
 	cost = 20
 
 /datum/ego_datum/armor/solitude
 	item_path = /obj/item/clothing/suit/armor/ego_gear/solitude
+	cost = 20
+
+// Forsaken Murderer - Regret
+/datum/ego_datum/weapon/regret
+	item_path = /obj/item/ego_weapon/regret
+	cost = 20
+
+/datum/ego_datum/armor/regret
+	item_path = /obj/item/clothing/suit/armor/ego_gear/regret
+	cost = 20
+
+// Ppodae - SO CUTE!!!
+/datum/ego_datum/weapon/cute
+	item_path = /obj/item/ego_weapon/cute
+	cost = 20
+
+/datum/ego_datum/armor/cute
+	item_path = /obj/item/clothing/suit/armor/ego_gear/cute
+	cost = 20
+
+// Today's Shy Look - Today's Expression
+/datum/ego_datum/weapon/shy
+	item_path = /obj/item/gun/ego_gun/pistol/shy
+	cost = 20
+
+/datum/ego_datum/armor/shy
+	item_path = /obj/item/clothing/suit/armor/ego_gear/shy
+	cost = 20
+
+//Grave of Cherry Blossoms - Blossom
+/datum/ego_datum/weapon/blossom
+	item_path = /obj/item/ego_weapon/mini/blossom
+	cost = 20
+
+/datum/ego_datum/armor/blossom
+	item_path = /obj/item/clothing/suit/armor/ego_gear/blossoms
+	cost = 20
+
+//Gone with a Simple Smile - Hat Trick
+/datum/ego_datum/weapon/trick
+	item_path = /obj/item/ego_weapon/mini/trick
+	cost = 20
+
+/datum/ego_datum/armor/trick
+	item_path = /obj/item/clothing/suit/armor/ego_gear/trick
+	cost = 20
+
+//Penitent Girl - Sorrow
+/datum/ego_datum/weapon/sorrow
+	item_path = /obj/item/ego_weapon/sorrow
+	cost = 20
+
+/datum/ego_datum/armor/sorrow
+	item_path = /obj/item/clothing/suit/armor/ego_gear/sorrow
+	cost = 20
+
+//Drowned Sisters - Sorority
+/datum/ego_datum/weapon/sorority
+	item_path = /obj/item/ego_weapon/sorority
+	cost = 20
+
+/datum/ego_datum/armor/sorority
+	item_path = /obj/item/clothing/suit/armor/ego_gear/sorority
+	cost = 20
+
+//Void Dream - Engulfing Dream
+/datum/ego_datum/weapon/dream
+	item_path = /obj/item/gun/ego_gun/dream
+	cost = 20
+
+/datum/ego_datum/armor/dream
+	item_path = /obj/item/clothing/suit/armor/ego_gear/dream
+	cost = 20
+
+//Beanstalk without Jack - Magic Bean
+/datum/ego_datum/armor/bean
+	item_path = /obj/item/clothing/suit/armor/ego_gear/bean
+	cost = 20
+
+/datum/ego_datum/weapon/bean
+	item_path = /obj/item/ego_weapon/mini/bean
+	cost = 20
+
+//Pale Horse - Revelation
+/datum/ego_datum/armor/revelation
+	item_path = /obj/item/clothing/suit/armor/ego_gear/revelation
 	cost = 20

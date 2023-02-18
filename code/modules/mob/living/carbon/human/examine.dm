@@ -187,27 +187,27 @@
 		else
 			temp = getBruteLoss()
 		if(temp)
-			if(temp < 25)
+			if(temp < (maxHealth*0.25))
 				msg += "[t_He] [t_has] minor bruising.\n"
-			else if(temp < 50)
+			else if(temp < (maxHealth*0.5))
 				msg += "[t_He] [t_has] <b>moderate</b> bruising!\n"
 			else
 				msg += "<B>[t_He] [t_has] severe bruising!</B>\n"
 
 		temp = getFireLoss()
 		if(temp)
-			if(temp < 25)
+			if(temp < (maxHealth*0.25))
 				msg += "[t_He] [t_has] minor burns.\n"
-			else if (temp < 50)
+			else if(temp < (maxHealth*0.5))
 				msg += "[t_He] [t_has] <b>moderate</b> burns!\n"
 			else
 				msg += "<B>[t_He] [t_has] severe burns!</B>\n"
 
 		temp = getCloneLoss()
 		if(temp)
-			if(temp < 25)
+			if(temp < (maxHealth*0.25))
 				msg += "[t_He] [t_has] minor cellular damage.\n"
-			else if(temp < 50)
+			else if(temp < (maxHealth*0.5))
 				msg += "[t_He] [t_has] <b>moderate</b> cellular damage!\n"
 			else
 				msg += "<b>[t_He] [t_has] severe cellular damage!</b>\n"
@@ -225,10 +225,7 @@
 	if(nutrition < NUTRITION_LEVEL_STARVING - 50)
 		msg += "[t_He] [t_is] severely malnourished.\n"
 	else if(nutrition >= NUTRITION_LEVEL_FAT)
-		if(user.nutrition < NUTRITION_LEVEL_STARVING - 50)
-			msg += "[t_He] [t_is] plump and delicious looking - Like a fat little piggy. A tasty piggy.\n"
-		else
-			msg += "[t_He] [t_is] quite chubby.\n"
+		msg += "[t_He] [t_is] quite chubby.\n"
 	switch(disgust)
 		if(DISGUST_LEVEL_GROSS to DISGUST_LEVEL_VERYGROSS)
 			msg += "[t_He] look[p_s()] a bit grossed out.\n"

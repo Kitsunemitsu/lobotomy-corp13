@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/judgement_bird
-	name = "Judgement bird"
+	name = "Judgement Bird"
 	desc = "A bird that used to judge the living in the dark forest, carrying around an unbalanced scale."
 	icon = 'ModularTegustation/Teguicons/48x64.dmi'
 	icon_state = "judgement_bird"
@@ -43,7 +43,7 @@
 	var/judgement_cooldown = 10 SECONDS
 	var/judgement_cooldown_base = 10 SECONDS
 	var/judgement_damage = 65
-	var/judgement_range = 8
+	var/judgement_range = 10
 
 /datum/action/innate/abnormality_attack/judgement
 	name = "Judgement"
@@ -82,13 +82,13 @@
 		L.apply_damage(judgement_damage, PALE_DAMAGE, null, L.run_armor_check(null, PALE_DAMAGE), spread_damage = TRUE)
 	icon_state = icon_living
 
-/mob/living/simple_animal/hostile/abnormality/judgement_bird/neutral_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/judgement_bird/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(40))
 		datum_reference.qliphoth_change(-1)
 	return
 
 // Additional effects on work failure
-/mob/living/simple_animal/hostile/abnormality/judgement_bird/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/judgement_bird/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(80))
 		datum_reference.qliphoth_change(-1)
 	return

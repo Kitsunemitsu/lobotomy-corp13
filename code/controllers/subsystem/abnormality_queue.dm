@@ -1,7 +1,10 @@
+#define ABNORMALITY_DELAY 180 SECONDS
+
 SUBSYSTEM_DEF(abnormality_queue)
 	name = "Abnormality Queue"
 	flags = SS_KEEP_TIMING | SS_BACKGROUND
-	wait = 5 MINUTES
+	runlevels = RUNLEVEL_GAME
+	wait = 10 SECONDS
 
 	/// List of(preferably) 3 abnormalities available for manager to choose from.
 	var/list/picking_abnormalities = list()
@@ -13,8 +16,15 @@ SUBSYSTEM_DEF(abnormality_queue)
 	var/list/possible_abnormalities = list(ZAYIN_LEVEL = list(), TETH_LEVEL = list(), HE_LEVEL = list(), WAW_LEVEL = list(), ALEPH_LEVEL = list())
 	/// Amount of abnormality room spawners at the round-start.
 	var/rooms_start = 0
-	/// Amount of times postspawn() proc has been called. Kept separate from spawned_abnos because admins love to call fire() manually
+	/// Amount of times postspawn() proc has been called. Kept separate from times_fired because admins love to call fire() manually
 	var/spawned_abnos = 0
+	// I am using this all because default subsystem waiting and next_fire is done in a very... interesting way.
+	/// World time at which new abnormality will be spawned
+	var/next_abno_spawn = INFINITY
+	/// Wait time for next abno spawn
+	var/next_abno_spawn_time = 4 MINUTES
+	/// Tracks if the current pick is forced
+	var/fucked_it_lets_rolled = FALSE
 
 /datum/controller/subsystem/abnormality_queue/Initialize(timeofday)
 	var/list/all_abnos = subtypesof(/mob/living/simple_animal/hostile/abnormality)
@@ -24,13 +34,17 @@ SUBSYSTEM_DEF(abnormality_queue)
 			possible_abnormalities[initial(abno.threat_level)] += abno
 	if(LAZYLEN(possible_abnormalities))
 		pick_abno()
-	addtimer(CALLBACK(src, .proc/HandleStartingAbnormalities), 180 SECONDS)
 	rooms_start = GLOB.abnormality_room_spawners.len
-	wait -= min(30, rooms_start * 0.05) MINUTES // 20 rooms will decrease wait time by 1 minute
-	wait -= min(30, GLOB.clients.len * 0.05) MINUTES // 20 players will ALSO decrease wait time by 1 minute
+	next_abno_spawn_time -= min(30, rooms_start * 0.05) MINUTES // 20 rooms will decrease wait time by 1 minute
 	..()
 
 /datum/controller/subsystem/abnormality_queue/fire()
+	if(world.time >= next_abno_spawn)
+		SpawnAbno()
+
+/datum/controller/subsystem/abnormality_queue/proc/SpawnAbno()
+	// Earlier in the game, abnormalities will spawn faster and then slow down a bit
+	next_abno_spawn = world.time + next_abno_spawn_time + ((min(16, spawned_abnos) - 4) * 6) SECONDS
 	// HE enabled, ZAYIN disabled
 	if(spawned_abnos > rooms_start * 0.2)
 		if(ZAYIN_LEVEL in available_levels)
@@ -62,8 +76,14 @@ SUBSYSTEM_DEF(abnormality_queue)
 		return
 
 	var/obj/effect/spawner/abnormality_room/choice = pick(GLOB.abnormality_room_spawners)
+
 	if(istype(choice) && ispath(queued_abnormality))
 		addtimer(CALLBACK(choice, .obj/effect/spawner/abnormality_room/proc/SpawnRoom))
+
+	if(fucked_it_lets_rolled)
+		for(var/obj/machinery/computer/abnormality_queue/Q in GLOB.abnormality_queue_consoles)
+			Q.ChangeLock(FALSE)
+		fucked_it_lets_rolled = FALSE
 
 /datum/controller/subsystem/abnormality_queue/proc/postspawn()
 	if(queued_abnormality)
@@ -95,11 +115,29 @@ SUBSYSTEM_DEF(abnormality_queue)
 
 /datum/controller/subsystem/abnormality_queue/proc/HandleStartingAbnormalities()
 	var/player_count = GLOB.clients.len
-	if(player_count < 6)
-		return
 	var/i
-	for(i=1 to round(player_count / 6))
-		fire()
+	for(i=1 to round(clamp(player_count, 6, 30) / 6))
+		SpawnAbno()
 		sleep(10 SECONDS) // Allows manager to select abnormalities if he is fast enough.
 	message_admins("[i] round-start abnormalities have been spawned.")
 	return
+
+/datum/controller/subsystem/abnormality_queue/proc/AnnounceLock()
+	fucked_it_lets_rolled = TRUE
+	for(var/obj/machinery/computer/abnormality_queue/Q in GLOB.abnormality_queue_consoles)
+		Q.ChangeLock(TRUE)
+	return
+
+/datum/controller/subsystem/abnormality_queue/proc/ClearChoices()
+	picking_abnormalities = list() // LAZY BUT WHATEVER
+	return
+
+/datum/controller/subsystem/abnormality_queue/proc/GetRandomPossibleAbnormality()
+	var/list/picking_abno = list()
+
+	for(var/level in available_levels)
+		if(!LAZYLEN(possible_abnormalities[level]))
+			continue
+		picking_abno |= possible_abnormalities[level]
+
+	return pick(picking_abno)

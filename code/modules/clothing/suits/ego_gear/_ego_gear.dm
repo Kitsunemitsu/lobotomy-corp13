@@ -3,12 +3,15 @@
 	desc = "You aren't meant to see this."
 	icon = 'icons/obj/clothing/ego_gear/suits.dmi'
 	worn_icon = 'icons/mob/clothing/ego_gear/suit.dmi'
+	blood_overlay_type = null
 	flags_inv = HIDEJUMPSUIT
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS|HEAD 	// We protect all because magic
 	cold_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS|HEAD
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS|HEAD
 	w_class = WEIGHT_CLASS_BULKY								//No more stupid 10 egos in bag
 	allowed = list(/obj/item/gun, /obj/item/ego_weapon, /obj/item/melee)
+	drag_slowdown = 1
+	var/equip_slowdown = 3 SECONDS
 
 	var/list/attribute_requirements = list()
 
@@ -19,11 +22,19 @@
 	if(slot_flags & slot) // Equipped to right slot, not just in hands
 		if(!CanUseEgo(H))
 			return FALSE
+		if(equip_slowdown > 0)
+			if(!do_after(H, equip_slowdown, target = H))
+				return FALSE
 	return ..()
+
 
 /obj/item/clothing/suit/armor/ego_gear/proc/CanUseEgo(mob/living/carbon/human/user)
 	if(!ishuman(user))
 		return FALSE
+	if(user.mind)
+		if(user.mind.assigned_role == "Sephirah") //This is an RP role
+			return FALSE
+
 	var/mob/living/carbon/human/H = user
 	for(var/atr in attribute_requirements)
 		if(attribute_requirements[atr] > get_attribute_level(H, atr))

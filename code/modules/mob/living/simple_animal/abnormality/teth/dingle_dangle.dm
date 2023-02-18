@@ -7,10 +7,10 @@
 	health = 600
 	threat_level = TETH_LEVEL
 	work_chances = list(
-		ABNORMALITY_WORK_INSTINCT = list(70, 50, 30, 30, 20),
-		ABNORMALITY_WORK_INSIGHT = list(20, 30, 70, 70, 70),
-		ABNORMALITY_WORK_ATTACHMENT = list(40, 30, 10, 10, 10),
-		ABNORMALITY_WORK_REPRESSION = list(40, 30, 20, 10, 10)
+		ABNORMALITY_WORK_INSTINCT = list(70, 60, 40, 40, 40),
+		ABNORMALITY_WORK_INSIGHT = list(30, 40, 70, 70, 70),
+		ABNORMALITY_WORK_ATTACHMENT = 40,
+		ABNORMALITY_WORK_REPRESSION = 40
 			)
 	pixel_x = -16
 	base_pixel_x = -16
@@ -27,8 +27,7 @@
 	var/dead = FALSE
 
 
-/mob/living/simple_animal/hostile/abnormality/dingledangle/work_complete(mob/living/carbon/human/user, work_type, pe)
-	..()
+/mob/living/simple_animal/hostile/abnormality/dingledangle/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	if(get_attribute_level(user, PRUDENCE_ATTRIBUTE) >= 60)
 		//I mean it does this in wonderlabs
 		user.dust()
@@ -37,7 +36,7 @@
 		var/location = get_turf(user)
 		new /obj/item/clothing/suit/armor/ego_gear/lutemis(location)
 
-/mob/living/simple_animal/hostile/abnormality/dingledangle/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/dingledangle/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(50))
 		//Yeah dust them too. No ego this time tho
 		user.dust()

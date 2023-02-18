@@ -251,7 +251,7 @@
 
 /obj/item/reagent_containers/food/drinks/mug/tea
 	name = "Duke Purple tea"
-	desc = "An insult to Duke Purple is an insult to the Space Queen! Any proper gentleman will fight you, if you sully this tea."
+	desc = "An insult to Duke Purple is an insult to the third Sephirah! Any proper gentleman will fight you, if you sully this tea."
 	list_reagents = list(/datum/reagent/consumable/tea = 30)
 
 /obj/item/reagent_containers/food/drinks/mug/coco
@@ -270,7 +270,6 @@
 	list_reagents = list(/datum/reagent/consumable/dry_ramen = 15, /datum/reagent/consumable/salt = 3)
 	foodtype = GRAIN
 	isGlass = FALSE
-	custom_price = PAYCHECK_ASSISTANT * 0.9
 
 /obj/item/reagent_containers/food/drinks/waterbottle
 	name = "bottle of water"

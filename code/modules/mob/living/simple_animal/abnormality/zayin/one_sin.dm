@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/onesin
-	name = "One sin and hundreds of good deeds"
+	name = "One Sin and Hundreds of Good Deeds"
 	desc = "A giant skull that is attached to a cross, it wears a crown of thorns."
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "onesin"
@@ -24,13 +24,14 @@
 		)
 	max_boxes = 10
 	gift_type =  /datum/ego_gifts/penitence
+	gift_message = "From this day forth, you shall never forget his words."
 
-/mob/living/simple_animal/hostile/abnormality/onesin/work_chance(mob/living/carbon/human/user, chance)
-	. = ..()
-	if (istype(user.ego_gift_list[HAT], /datum/ego_gifts/penitence))
+/mob/living/simple_animal/hostile/abnormality/onesin/WorkChance(mob/living/carbon/human/user, chance)
+	if(istype(user.ego_gift_list[HAT], /datum/ego_gifts/penitence))
 		return chance + 10
+	return chance
 
-/mob/living/simple_animal/hostile/abnormality/onesin/attempt_work(mob/living/carbon/human/user, work_type)
+/mob/living/simple_animal/hostile/abnormality/onesin/AttemptWork(mob/living/carbon/human/user, work_type)
 	if(work_type == "Confess")
 		if(isapostle(user))
 			for(var/mob/living/simple_animal/hostile/abnormality/white_night/WN in GLOB.mob_living_list)
@@ -46,7 +47,7 @@
 		return FALSE
 	return TRUE
 
-/mob/living/simple_animal/hostile/abnormality/onesin/work_complete(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/onesin/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	if(work_type == "Confess")
 		for(var/mob/living/simple_animal/hostile/abnormality/white_night/WN in GLOB.mob_living_list)
 			if(WN.status_flags & GODMODE)
@@ -65,14 +66,18 @@
 			if(M.client)
 				M.playsound_local(get_turf(M), 'sound/abnormalities/onesin/confession_end.ogg', 50, 0)
 		return
-	if (prob(5)) // Will be 5%
-		user.Apply_Gift(new /datum/ego_gifts/penitence)
 	return ..()
 
-/mob/living/simple_animal/hostile/abnormality/onesin/success_effect(mob/living/carbon/human/user, work_type, pe)
-	user.adjustSanityLoss(10) // It's healing
+/mob/living/simple_animal/hostile/abnormality/onesin/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
+	user.adjustSanityLoss(-user.maxSanity * 0.5) // It's healing
 	if(pe >= datum_reference.max_boxes)
 		for(var/mob/living/carbon/human/H in GLOB.player_list)
-			H.adjustSanityLoss(10)
-	..()
-
+			if(H.z != z)
+				continue
+			if(H == user)
+				continue
+			var/heal_factor = 0.5
+			if(H.sanity_lost)
+				heal_factor = 0.25
+			H.adjustSanityLoss(-H.maxSanity * heal_factor)
+	return ..()

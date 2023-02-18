@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/abnormality/hatred_queen
-	name = "Queen of hatred"
-	desc = "A an abnormality resembling pale-skinned girl in a rather bizzare outfit. \
+	name = "Queen of Hatred"
+	desc = "An abnormality resembling pale-skinned girl in a rather bizzare outfit. \
 	Right behind her is what you presume to be a magic wand."
 	icon = 'ModularTegustation/Teguicons/32x48.dmi'
 	icon_state = "hatred"
@@ -11,7 +11,8 @@
 	is_flying_animal = TRUE
 
 	ranged = TRUE
-	minimum_distance = 3
+	retreat_distance = 1
+	minimum_distance = 2
 
 	maxHealth = 2000
 	health = 2000
@@ -26,6 +27,7 @@
 	speed = 2
 	move_to_delay = 4
 	threat_level = WAW_LEVEL
+	can_patrol = FALSE
 
 	work_chances = list(
 						ABNORMALITY_WORK_INSTINCT = list(30, 40, 40, 50, 50),
@@ -43,10 +45,11 @@
 		/datum/ego_datum/weapon/hatred,
 		/datum/ego_datum/armor/hatred
 		)
-	gift_type =  /datum/ego_gifts/love_and_hate
+	gift_type = /datum/ego_gifts/love_and_hate
 
 	attack_action_types = list(
 		/datum/action/innate/abnormality_attack/qoh_beam,
+		/datum/action/innate/abnormality_attack/qoh_beats,
 		/datum/action/innate/abnormality_attack/qoh_teleport,
 		/datum/action/innate/abnormality_attack/qoh_normal
 		)
@@ -59,8 +62,12 @@
 	var/teleport_cooldown
 	var/teleport_cooldown_time = 30 SECONDS
 	var/beam_cooldown
-	var/beam_cooldown_time = 30 SECONDS
-	var/beam_startup = 3.5 SECONDS
+	var/beam_cooldown_time = 40 SECONDS
+	var/beam_startup = 2 SECONDS
+	var/beats_cooldown
+	var/beats_cooldown_time = 15 SECONDS
+	var/beats_damage = 250
+	var/list/beats_hit = list()
 	/// BLACK damage done in line each 0.5 second
 	var/beam_damage = 10
 	var/beam_maximum_ticks = 60
@@ -69,7 +76,7 @@
 	var/list/spawned_effects = list()
 	//hostile breach vars
 	var/hp_teleport_counter = 3
-	var/explode_damage = 35
+	var/explode_damage = 60 // Boosted from 35 due to Indication she's gonna be there. It's a legit skill issue now.
 	var/breach_max_death = 0
 
 /datum/action/innate/abnormality_attack/qoh_beam
@@ -79,12 +86,19 @@
 	chosen_message = "<span class='colossus'>You will now charge up a giant magic beam.</span>"
 	chosen_attack_num = 1
 
+/datum/action/innate/abnormality_attack/qoh_beats
+	name = "Arcana Beats"
+	icon_icon = 'icons/obj/wizard.dmi'
+	button_icon_state = "arrow"
+	chosen_message = "<span class='colossus'>You will now fire a wave of energy.</span>"
+	chosen_attack_num = 2
+
 /datum/action/innate/abnormality_attack/qoh_teleport
 	name = "Teleport"
 	icon_icon = 'icons/obj/wizard.dmi'
 	button_icon_state = "scroll"
 	chosen_message = "<span class='colossus'>You will now teleport to a random enemy.</span>"
-	chosen_attack_num = 2
+	chosen_attack_num = 3
 
 /datum/action/innate/abnormality_attack/qoh_normal
 	name = "Normal Attack"
@@ -124,7 +138,7 @@
 		return FALSE
 	return ..()
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/AttackingTarget(atom/attacked_target)
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/AttackingTarget()
 	return OpenFire()
 
 /mob/living/simple_animal/hostile/abnormality/hatred_queen/OpenFire()
@@ -136,20 +150,24 @@
 			if(1)
 				BeamAttack(target)
 			if(2)
+				if(datum_reference?.qliphoth_meter == 2)
+					ArcanaBeats(target)
+			if(3)
 				TryTeleport()
 			if(5)
 				if(datum_reference?.qliphoth_meter == 2) //only able to use normal if passive
-					if(prob(5))
-						addtimer(CALLBACK(src, .atom/movable/proc/say, "With love!"))
 					return ..()
 		return
 
-	if(beam_cooldown <= world.time && can_act && (prob(50) || datum_reference?.qliphoth_meter != 2)) //hostile breach should always be beaming
+	if(beam_cooldown <= world.time && can_act && (prob(40) || datum_reference?.qliphoth_meter != 2)) //hostile breach should always be beaming
 		BeamAttack(target)
 		return
 	if(!("neutral" in faction))
 		return
-	if(prob(5))
+	if((beats_cooldown <= world.time) && prob(50))
+		ArcanaBeats(target)
+		return
+	if(prob(2))
 		addtimer(CALLBACK(src, .atom/movable/proc/say, "With love!"))
 	return ..()
 
@@ -187,7 +205,9 @@
 	SIGNAL_HANDLER
 	if(!ishuman(died))
 		return FALSE
-	if(!died.ckey)
+	if(died.z != z)
+		return FALSE
+	if(!died.mind)
 		return FALSE
 	death_counter += 1
 	//if BREACHED, check if death_counter over the death limit
@@ -195,8 +215,72 @@
 		GoHysteric()
 	//if CONTAINED and not crazy
 	else if((status_flags & GODMODE) && (datum_reference?.qliphoth_meter == 2) && (death_counter > 3)) // Omagah a lot of dead people!
-		breach_effect() // We must help them!
+		BreachEffect() // We must help them!
 	return TRUE
+
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/proc/ArcanaBeats(target)
+	if(beats_cooldown > world.time)
+		return FALSE
+	if(!can_act)
+		return FALSE
+	can_act = FALSE
+	if(target)
+		face_atom(target)
+	icon_state = "hatredbeats"
+	visible_message("<span class='danger'>[src] prepares to mark the enemies of justice!</span>")
+	var/turf/target_turf = get_ranged_target_turf_direct(src, target, 4)
+	var/list/turfs_to_hit = getline(src, target_turf)
+	var/obj/effect/qoh_sygil/S = new(get_turf(src))
+	S.icon_state = "qoh1"
+	addtimer(CALLBACK(src, .atom/movable/proc/say, "Go! Arcana Beats~!"))
+	switch(dir)
+		if(EAST)
+			S.pixel_x += 16
+			var/matrix/new_matrix = matrix()
+			new_matrix.Scale(0.5, 1)
+			S.transform = new_matrix
+			S.layer += 0.1
+		if(WEST)
+			S.pixel_x += -16
+			var/matrix/new_matrix = matrix()
+			new_matrix.Scale(0.5, 1)
+			S.transform = new_matrix
+			S.layer += 0.1
+		if(SOUTH)
+			S.pixel_y += -16
+			S.layer += 0.1
+		if(NORTH)
+			S.pixel_y += 16
+			S.layer -= 0.1
+	SLEEP_CHECK_DEATH(1.5 SECONDS)
+	playsound(src, 'sound/abnormalities/hatredqueen/gun.ogg', 65, FALSE, 10)
+	icon_state = "hatredrecoil"
+	beats_hit = list()
+	var/i = 1
+	for(var/turf/T in turfs_to_hit)
+		addtimer(CALLBACK(src, .proc/BeatsTurf, T), i*0.4)
+		i++
+	SLEEP_CHECK_DEATH(2 SECONDS)
+	S.fade_out()
+	icon_state = icon_living
+	can_act = TRUE
+	beats_cooldown = world.time + beats_cooldown_time
+
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/proc/BeatsTurf(turf/T)
+	var/list/affected_turfs = list()
+	for(var/turf/TT in range(1, T))
+		if(locate(/obj/effect/temp_visual/revenant) in TT)
+			continue
+		affected_turfs += TT
+		var/obj/effect/temp_visual/TV = new /obj/effect/temp_visual/revenant(TT)
+		TV.color = COLOR_SOFT_RED
+		for(var/mob/living/L in TT) // Direct hit
+			if(L in beats_hit)
+				continue
+			if(faction_check_mob(L))
+				continue
+			beats_hit += L
+			L.apply_damage(beats_damage, BLACK_DAMAGE, null, L.run_armor_check(null, BLACK_DAMAGE))
 
 /mob/living/simple_animal/hostile/abnormality/hatred_queen/proc/BeamAttack(target)
 	if(beam_cooldown > world.time)
@@ -295,7 +379,7 @@
 					L.adjustBruteLoss(-beam_damage_final * 0.5)
 					if(ishuman(L))
 						var/mob/living/carbon/human/H = L
-						H.adjustSanityLoss(beam_damage_final * 0.5)
+						H.adjustSanityLoss(-beam_damage_final * 0.5)
 					continue
 				var/damage_before = L.get_damage_amount(BRUTE)
 				L.apply_damage(beam_damage_final, BLACK_DAMAGE, null, L.run_armor_check(null, BLACK_DAMAGE))
@@ -311,7 +395,7 @@
 	QDEL_NULL(current_beam)
 	for(var/obj/effect/qoh_sygil/S in spawned_effects)
 		S.fade_out()
-	SLEEP_CHECK_DEATH(5 SECONDS) //Rest after laser beam
+	SLEEP_CHECK_DEATH(3 SECONDS) //Rest after laser beam
 	can_act = TRUE
 	beam_cooldown = world.time + beam_cooldown_time
 
@@ -335,9 +419,8 @@
 	for(var/mob/living/L in GLOB.mob_living_list)
 		if(L.stat == DEAD || L.z != z || L.status_flags & GODMODE)
 			continue
-		if(!forced)
-			if(datum_reference?.qliphoth_meter != 2 && !ishuman(L))
-				continue
+		if(datum_reference?.qliphoth_meter != 2 && !ishuman(L))
+			continue
 		var/turf/T = get_turf(L)
 		if(!faction_check_mob(L) && L.stat != DEAD)
 			teleport_potential += T
@@ -350,7 +433,10 @@
 	var/turf/teleport_target = pick(teleport_potential)
 	animate(src, alpha = 0, time = 5)
 	new /obj/effect/temp_visual/guardian/phase(get_turf(src))
-	SLEEP_CHECK_DEATH(5)
+	var/obj/effect/qoh_sygil/S = new(teleport_target)
+	S.icon_state = "qoh2"
+	addtimer(CALLBACK(S, .obj/effect/qoh_sygil/proc/fade_out), 2 SECONDS)
+	SLEEP_CHECK_DEATH(2 SECONDS)
 	animate(src, alpha = 255, time = 5)
 	new /obj/effect/temp_visual/guardian/phase/out(teleport_target)
 	forceMove(teleport_target)
@@ -370,7 +456,7 @@
 				continue
 			L.apply_damage(explode_damage, BLACK_DAMAGE, null, L.run_armor_check(null, BLACK_DAMAGE), spread_damage = TRUE)
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/work_chance(mob/living/carbon/human/user, chance)
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/WorkChance(mob/living/carbon/human/user, chance)
 	return chance * chance_modifier
 
 /mob/living/simple_animal/hostile/abnormality/hatred_queen/OnQliphothEvent()
@@ -415,24 +501,24 @@
 	addtimer(CALLBACK(src, .atom/movable/proc/say, "I wasn’t able to protect anyone like she did…"))
 	addtimer(CALLBACK(datum_reference, .datum/abnormality/proc/qliphoth_change, -1), 10 SECONDS)
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/success_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/SuccessEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/neutral_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
 	if(datum_reference?.qliphoth_meter == 1)
 		datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/hatred_queen/breach_effect(mob/living/carbon/human/user)
-	..()
+/mob/living/simple_animal/hostile/abnormality/hatred_queen/BreachEffect(mob/living/carbon/human/user)
 	death_counter = 0
 	if(datum_reference?.qliphoth_meter == 2) // Helpful/Passive breach
 		fear_level = TETH_LEVEL
+		beam_cooldown = world.time + beam_cooldown_time //no immediate beam
 		addtimer(CALLBACK(src, .proc/TryTeleport), 5)
 		for(var/mob/living/carbon/human/saving_humans in GLOB.mob_living_list) //gets all alive people
 			if((saving_humans.stat != DEAD) && saving_humans.z == z)
@@ -441,7 +527,7 @@
 		if(breach_max_death == 0) //make it 1 if it's somehow zero
 			breach_max_death++
 		addtimer(CALLBACK(src, .atom/movable/proc/say, "In the name of Love and Justice~ Here comes Magical Girl!"))
-		return
+		return ..()
 	visible_message("<span class='danger'>[src] transforms!</span>") //Begin Hostile breach
 	REMOVE_TRAIT(src, TRAIT_MOVE_FLYING, ROUNDSTART_TRAIT)
 	adjustBruteLoss(-maxHealth)
@@ -456,7 +542,6 @@
 	beam_cooldown_time = 10 SECONDS //it's her only move while hostile
 	teleport_cooldown_time = 10 SECONDS
 	breach_max_death = 0 //who cares about humans anymore?
+	retreat_distance = null //this is annoying
 	addtimer(CALLBACK(src, .proc/TryTeleport, TRUE), 5)
-	return
-
-
+	return ..()

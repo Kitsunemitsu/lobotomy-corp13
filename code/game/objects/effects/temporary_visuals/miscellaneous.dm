@@ -228,6 +228,9 @@
 	. = ..()
 	animate(src, alpha = 0, time = duration)
 
+/obj/effect/temp_visual/small_smoke/fixer_w
+	name = "mental smoke"
+
 /obj/effect/temp_visual/small_smoke/halfsecond
 	duration = 5
 
@@ -245,6 +248,9 @@
 /obj/effect/temp_visual/sparks
 	icon_state = "sparks"
 	duration = 5
+
+/obj/effect/temp_visual/sparks/quantum
+	icon_state = "quantum_sparks"
 
 /obj/effect/temp_visual/revenant
 	name = "spooky lights"
@@ -574,6 +580,18 @@
 /obj/effect/temp_visual/judgement/proc/fade_out()
 	animate(src, alpha = 0, time = duration-10)
 
+/obj/effect/temp_visual/judgement/still
+	icon_state = "judge_still"
+	duration = 20
+
+/obj/effect/temp_visual/whitelake
+	icon_state = "whitelake"
+	duration = 20
+
+/obj/effect/temp_visual/thirteen
+	icon_state = "thirteen"
+	duration = 20
+
 /obj/effect/temp_visual/paradise_attack
 	icon_state = "paradise_attack"
 	duration = 10
@@ -645,6 +663,11 @@
 /obj/effect/temp_visual/slice
 	name = "slice"
 	icon_state = "slice"
+	duration = 4
+
+/obj/effect/temp_visual/dir_setting/slash
+	name = "slash"
+	icon_state = "slash"
 	duration = 4
 
 /obj/effect/temp_visual/hatred
@@ -730,3 +753,77 @@
 	name = "apocaspiral"
 	icon_state = "apocalypse_enchant_effect"
 	layer = ABOVE_ALL_MOB_LAYER
+
+/obj/effect/temp_visual/ambermidnight_hole
+	name = "hole"
+	icon = 'ModularTegustation/Teguicons/224x128.dmi'
+	icon_state = "ambermidnight_hole"
+	duration = 10 SECONDS
+	pixel_x = -96
+	base_pixel_x = -96
+	pixel_y = -16
+	base_pixel_y = -16
+
+/obj/effect/temp_visual/ambermidnight_hole/Initialize()
+	..()
+	animate(src, alpha = 0, time = duration)
+
+/obj/effect/temp_visual/cross
+	name = "holy cross"
+	icon = 'icons/effects/32x64.dmi'
+	icon_state = "cross"
+	duration = 2 SECONDS
+
+/obj/effect/temp_visual/cross/fall
+	icon_state = "cross_fall"
+	duration = 8 SECONDS
+
+/obj/effect/temp_visual/cross/fall/Initialize()
+	..()
+	addtimer(CALLBACK(src, .proc/FadeOut), 6 SECONDS)
+
+/obj/effect/temp_visual/cross/fall/proc/FadeOut()
+	animate(src, alpha = 0, time = 2 SECONDS)
+
+/obj/effect/temp_visual/markedfordeath
+	name = "marked"
+	icon_state = "markdeath"
+	duration = 13
+
+/obj/effect/temp_visual/mermaid_drowning
+	name = "lovely drowning"
+	icon = 'ModularTegustation/Teguicons/tegu_effects.dmi'
+	icon_state = "mermaid_drowning"
+	duration = 0.5 SECONDS
+
+/obj/effect/temp_visual/mermaid_drowning/Initialize()
+	..()
+	animate(src, alpha = 0, pixel_y = pixel_y + 5 , time = duration)
+
+/obj/effect/temp_visual/alriune_attack
+	name = "petals"
+	icon_state = "alriune_attack"
+	duration = 6
+
+/obj/effect/temp_visual/alriune_curtain
+	name = "flower curtain"
+	icon = 'ModularTegustation/Teguicons/tegu_effects.dmi'
+	icon_state = "alriune_curtain"
+	duration = 2 SECONDS
+
+/obj/effect/temp_visual/alriune_curtain/Initialize()
+	..()
+	animate(src, alpha = 255, time = 5)
+	addtimer(CALLBACK(src, .proc/FadeOut), 5)
+
+/obj/effect/temp_visual/alriune_curtain/proc/FadeOut()
+	animate(src, alpha = 0, time = 15)
+
+/obj/effect/temp_visual/tbirdlightning
+	name = "emp pulse"
+	icon = 'ModularTegustation/Teguicons/64x96.dmi'
+	icon_state = "lightning"
+	duration = 8
+	randomdir = 0
+	pixel_y = 0
+	pixel_x = -16

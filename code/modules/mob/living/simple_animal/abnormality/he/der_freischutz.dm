@@ -5,7 +5,6 @@
 	icon_state = "derfreischutz"
 	threat_level = HE_LEVEL
 	start_qliphoth = 3
-	pixel_y = 4
 	work_chances = list(
 		ABNORMALITY_WORK_INSTINCT = 40,
 		ABNORMALITY_WORK_INSIGHT = 50,
@@ -17,24 +16,25 @@
 
 	ego_list = list(
 		/datum/ego_datum/weapon/magicbullet,
+		/datum/ego_datum/weapon/magicpistol,
 		/datum/ego_datum/armor/magicbullet
 		)
 	gift_type =  /datum/ego_gifts/magicbullet
 
-/mob/living/simple_animal/hostile/abnormality/der_freischutz/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
+/mob/living/simple_animal/hostile/abnormality/der_freischutz/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
 	if(get_attribute_level(user, JUSTICE_ATTRIBUTE) < 60)
 		datum_reference.qliphoth_change(-1)
-	return ..()
+	return
 
-/mob/living/simple_animal/hostile/abnormality/der_freischutz/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/der_freischutz/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-(prob(75)))
 	return ..()
 
-/mob/living/simple_animal/hostile/abnormality/der_freischutz/neutral_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/der_freischutz/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-(prob(50)))
 	return ..()
 
-/mob/living/simple_animal/hostile/abnormality/der_freischutz/zero_qliphoth(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/der_freischutz/ZeroQliphoth(mob/living/carbon/human/user)
 	var/list/targets = list()
 	var/turf/targetturf
 	var/targetx
@@ -69,6 +69,15 @@
 	src.fire_magic_bullet(targetturf, freidir)
 	datum_reference.qliphoth_change(3)
 	return ..()
+
+/mob/living/simple_animal/hostile/abnormality/der_freischutz/proc/Machine_Gun(mob/living/target = null, shots = 7)
+	for(var/i = 0 to shots)
+		if(!isnull(target))
+			if(target.health <= 0)
+				break
+			fire_magic_bullet(target)
+		else
+			fire_magic_bullet()
 
 /mob/living/simple_animal/hostile/abnormality/der_freischutz/proc/fire_magic_bullet(target = pick(GLOB.xeno_spawn), freidir = pick(EAST,WEST))
 	src.icon = 'ModularTegustation/Teguicons/64x64.dmi'
@@ -116,7 +125,7 @@
 			var/obj/effect/magic_bullet/B = new(T)
 			playsound(get_turf(src), 'sound/abnormalities/freischutz/shoot.ogg', 100, 0, 20)
 			B.dir = freidir
-			walk(B,freidir,0,0)
+			addtimer(CALLBACK(B, .obj/effect/magic_bullet/proc/moveBullet), 0.1)
 			src.icon = 'ModularTegustation/Teguicons/32x64.dmi'
 			src.update_icon()
 			for(var/obj/effect/frei_magic/Port in portals)

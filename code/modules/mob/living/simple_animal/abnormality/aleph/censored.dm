@@ -18,11 +18,12 @@
 	maxHealth = 4000
 	obj_damage = 600
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0.6, WHITE_DAMAGE = 0.8, BLACK_DAMAGE = 0.4, PALE_DAMAGE = 1)
+	armortype = BLACK_DAMAGE
 	melee_damage_type = BLACK_DAMAGE
-	melee_damage_lower = 60
-	melee_damage_upper = 75
-	speed = 4
-	move_to_delay = 5
+	melee_damage_lower = 75
+	melee_damage_upper = 80
+	speed = 3
+	move_to_delay = 4
 	/* Works */
 	start_qliphoth = 2
 	can_breach = TRUE
@@ -37,12 +38,23 @@
 	work_damage_type = BLACK_DAMAGE
 
 	ego_list = list(
-		/datum/ego_datum/weapon/censored
+		/datum/ego_datum/weapon/censored,
+		/datum/ego_datum/armor/censored
 		)
 
 	gift_type =  /datum/ego_gifts/censored
+	gift_message = "You feel disgusted just looking at it."
 
 	var/can_act = TRUE
+
+/mob/living/simple_animal/hostile/abnormality/censored/FearEffectText(mob/affected_mob, level = 0)
+	level = num2text(clamp(level, 3, 5))
+	var/list/result_text_list = list(
+		"3" = list("GODDAMN IT!!!!", "H-Help...", "I don't want to die!"),
+		"4" = list("What am I seeing...?", "I-I can't take it...", "I can't understand..."),
+		"5" = list("It's all over...", "What...")
+		)
+	return pick(result_text_list[level])
 
 /* Combat */
 /mob/living/simple_animal/hostile/abnormality/censored/Move()
@@ -59,8 +71,8 @@
 				break
 
 /mob/living/simple_animal/hostile/abnormality/censored/CanAttack(atom/the_target)
-	if(isliving(target) && !ishuman(target))
-		var/mob/living/L = target
+	if(isliving(the_target) && !ishuman(the_target))
+		var/mob/living/L = the_target
 		if(L.stat == DEAD)
 			return FALSE
 	return ..()
@@ -98,11 +110,13 @@
 	can_act = TRUE
 
 /* Work */
-/mob/living/simple_animal/hostile/abnormality/censored/attempt_work(mob/living/carbon/human/user, work_type)
+/mob/living/simple_animal/hostile/abnormality/censored/AttemptWork(mob/living/carbon/human/user, work_type)
 	if(work_type == "Sacrifice")
 		to_chat(user, "<span class='warning'>You hesitate for a moment...</span>")
+		datum_reference.working = TRUE
 		if(!do_after(user, 3 SECONDS, target = user))
 			to_chat(user, "<span class='warning'>You decide it's not worth it.</span>")
+			datum_reference.working = FALSE
 			return null
 		user.Stun(30 SECONDS)
 		step_towards(user, src)
@@ -111,26 +125,29 @@
 		new /obj/effect/temp_visual/censored(get_turf(src))
 		sleep(0.3 SECONDS)
 		playsound(src, 'sound/abnormalities/censored/sacrifice.ogg', 45, FALSE, 10)
-		user.death()
-		for(var/i = 1 to 3)
-			new /obj/effect/gibspawner/generic/silent(get_turf(src))
-			sleep(5.4)
-		datum_reference.qliphoth_change(1)
-		QDEL_NULL(user)
+		if(status_flags & GODMODE) //If CENSORED is still contained within this small time frame
+			datum_reference.qliphoth_change(1)
+			user.death()
+			for(var/i = 1 to 3)
+				new /obj/effect/gibspawner/generic/silent(get_turf(src))
+				sleep(5.4)
+			QDEL_NULL(user)
+		else
+			user.AdjustStun(-999) //run for your life
+		datum_reference.working = FALSE
 		return null
 	return TRUE
 
-/mob/living/simple_animal/hostile/abnormality/censored/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
-	..()
+/mob/living/simple_animal/hostile/abnormality/censored/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
 	if(user.sanity_lost)
 		datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/censored/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/censored/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/censored/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/censored/BreachEffect(mob/living/carbon/human/user)
 	..()
 	icon_living = "censored_breach"
 	icon_state = icon_living
@@ -139,7 +156,7 @@
 /* The mini censoreds */
 /mob/living/simple_animal/hostile/mini_censored
 	name = "???"
-	desc = "What the hell is this? It shouldn't exist... On the second thought, it reminds you of someone you knew..."
+	desc = "What the hell is this? It shouldn't exist..."
 	icon = 'ModularTegustation/Teguicons/32x32.dmi'
 	icon_state = "censored_mini"
 	icon_living = "censored_mini"
@@ -156,8 +173,8 @@
 	melee_damage_type = BLACK_DAMAGE
 	melee_damage_lower = 14
 	melee_damage_upper = 20
-	speed = 3
-	move_to_delay = 4
+	speed = 2
+	move_to_delay = 3
 	robust_searching = TRUE
 	stat_attack = HARD_CRIT
 	del_on_death = TRUE
@@ -178,7 +195,8 @@
 		return FALSE
 	if(status_flags & GODMODE)
 		return FALSE
-	addtimer(CALLBACK(src, .proc/ShakePixels), rand(7, 14))
+	for(var/i = 1 to 2)
+		addtimer(CALLBACK(src, .proc/ShakePixels), i*5 + rand(1, 4))
 	ShakePixels()
 	FearEffect()
 	return
@@ -195,8 +213,8 @@
 		if(HAS_TRAIT(H, TRAIT_COMBATFEAR_IMMUNE))
 			continue
 		breach_affected += H
-		H.adjustSanityLoss(-20)
+		H.adjustSanityLoss(20)
 		if(H.sanity_lost)
 			continue
-		to_chat(H, "<span class='warning'>Here it comes!")
+		to_chat(H, "<span class='warning'>Damn, it's scary.</span>")
 	return

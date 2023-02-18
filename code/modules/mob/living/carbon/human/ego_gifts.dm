@@ -1,19 +1,27 @@
-#define HAT "Hat_Slot"
-#define HELMET "Helmet_Slot"
-#define EYE "Eye_Slot"
-#define FACE "Face_Slot"
-#define MOUTH_1 "Mouth_Slot_1"
-#define MOUTH_2 "Mouth_Slot_2"
-#define CHEEK "Cheek_Slot"
-#define BROOCH "Brooch_Slot"
-#define NECKWEAR "Neckwear_Slot"
-#define LEFTBACK "Left_Back_Slot"
-#define RIGHTBACK "Right_Back_Slot"
-#define HAND_1 "Hand_Slot_1"
-#define HAND_2 "Hand_Slot_2"
-#define SPECIAL "Special_Other_Slot"
+#define HAT "Hat Slot"
+#define HELMET "Helmet Slot"
+#define EYE "Eye Slot"
+#define FACE "Face Slot"
+#define MOUTH_1 "Mouth Slot 1"
+#define MOUTH_2 "Mouth Slot 2"
+#define CHEEK "Cheek Slot"
+#define BROOCH "Brooch Slot"
+#define NECKWEAR "Neckwear Slot"
+#define LEFTBACK "Left Back Slot"
+#define RIGHTBACK "Right Back Slot"
+#define HAND_1 "Hand Slot 1"
+#define HAND_2 "Hand Slot 2"
+#define SPECIAL "Special/Other Slot"
+
+// Helper lists
+#define EGO_GIFT_BONUSES list("fortitude_bonus", "prudence_bonus", "temperance_bonus", "justice_bonus", \
+						"instinct_mod", "insight_mod", "attachment_mod", "repression_mod")
+
+#define EGO_GIFT_BONUS_WORKS list("instinct_mod", "insight_mod", "attachment_mod", "repression_mod")
+
 /datum/ego_gifts // Currently Covers most EGO Gift Functions, most others can be done via armors
 	var/name = ""
+	var/desc = null
 	var/icon = 'icons/mob/clothing/ego_gear/ego_gifts.dmi'
 	var/icon_state = ""
 	var/layer = -ABOVE_MOB_LAYER
@@ -26,6 +34,10 @@
 	var/insight_mod = 0
 	var/attachment_mod = 0
 	var/repression_mod = 0
+	var/locked = FALSE
+	var/visible = TRUE
+	var/mob/living/carbon/human/owner
+	var/datum/abnormality/datum_reference = null
 
 /datum/ego_gifts/proc/Initialize(mob/living/carbon/human/user)
 	user.ego_gift_list[src.slot] = src
@@ -38,6 +50,7 @@
 	user.physiology.insight_success_mod += src.insight_mod
 	user.physiology.attachment_success_mod += src.attachment_mod
 	user.physiology.repression_success_mod += src.repression_mod
+	owner = user
 	return
 
 /datum/ego_gifts/proc/Remove(mob/living/carbon/human/user)
@@ -53,25 +66,110 @@
 	QDEL_NULL(src)
 	return
 
+/datum/ego_gifts/Topic(href, list/href_list)
+	switch(href_list["choice"])
+		if("lock")
+			locked = locked ? FALSE : TRUE
+			owner.ShowGifts()
+		if("hide")
+			if(visible)
+				owner.cut_overlay(mutable_appearance(src.icon, src.icon_state, src.layer))
+			else
+				owner.add_overlay(mutable_appearance(src.icon, src.icon_state, src.layer))
+			visible = !visible
+		if("dissolve")
+			var/datum/ego_gifts/empty/E = new
+			E.slot = src.slot
+			if(tgui_alert(owner, "Are you sure you want to dissolve the [src]?", "Dissolve Gift", list("Yes", "No"), 0) == "Yes") // We only go if they hit "Yes" specifically.
+				if(datum_reference)
+					var/PE = 0
+					PE += (datum_reference.threat_level * datum_reference.threat_level)
+					if(istype(src, /datum/ego_gifts/blossoming) || istype(src, /datum/ego_gifts/paradise)) // Why though
+						PE *= 2
+					if(ispath(datum_reference.abno_path, /mob/living/simple_animal/hostile/abnormality/crumbling_armor))
+						switch(tgui_alert(owner, "To think one would commit such a shameful act... what have ye, weaker body or mind?", "Cowardice", list("Body", "Mind"), 0))
+							if("Body")
+								owner.adjust_attribute_buff(FORTITUDE_ATTRIBUTE, -5)
+								to_chat(owner, "<span class='notice'>Least ye have not hid from this.</span>")
+							if("Mind")
+								owner.adjust_attribute_buff(PRUDENCE_ATTRIBUTE, -5)
+								to_chat(owner, "<span class='notice'>Least ye have not hid from this.</span>")
+							else
+								owner.adjust_attribute_buff(PRUDENCE_ATTRIBUTE, -5)
+								owner.adjust_attribute_buff(FORTITUDE_ATTRIBUTE, -5)
+								to_chat(owner, "<span class='userdanger'>Even now you try and run? Clearly you are lacking in both!</span>")
+						to_chat(owner, "<span class='warning'>The once cool flames now burn your flesh!</span>")
+						owner.adjustBruteLoss(100)
+						return
+					to_chat(owner, "<span class='notice'>The [src] has dissolved into [PE] PE for [datum_reference.name]!</span>")
+					datum_reference.stored_boxes += PE
+				else
+					to_chat(owner, "<span class='notice'>The [src] has dissolved into... light?</span>")
+				owner.Apply_Gift(E)
+		if("description")
+			var/dat = "<b>[name]</b>"
+			dat += "<hr><br>"
+			if(desc)
+				dat += desc
+				dat += "<hr><br>"
+			// Attempted to make it a define and failed, so here it is
+			var/list/text_list = list(
+				"fortitude_bonus" = FORTITUDE_ATTRIBUTE,
+				"prudence_bonus" = PRUDENCE_ATTRIBUTE,
+				"temperance_bonus" = TEMPERANCE_ATTRIBUTE,
+				"justice_bonus" = JUSTICE_ATTRIBUTE,
+				"instinct_mod" = "Instinct Work",
+				"insight_mod" = "Insight Work",
+				"attachment_mod" = "Attachment Work",
+				"repression_mod" = "Repression Work",
+				)
+			for(var/thing in EGO_GIFT_BONUSES)
+				var/thing_num = vars[thing]
+				if(thing_num == 0)
+					continue
+				var/thing_name = text_list[thing]
+				dat += "[thing_name]: [thing_num > 0 ? "+" : ""][thing_num][(thing in EGO_GIFT_BONUS_WORKS) ? "%" : ""]<br>"
+			var/datum/browser/popup = new(owner, "gift_description", "<div align='center'>[name]</div>", 300, 350)
+			popup.set_content(dat)
+			popup.open(FALSE)
+		else
+			CRASH("Gift Topic Error in [src]. [owner] clicked a non-existant button!?")
+
 /mob/living/carbon/human/proc/Apply_Gift(datum/ego_gifts/given) // Gives the gift and removes the effects of the old one if necessary
 	if(!istype(given))
 		return
 	if(!isnull(ego_gift_list[given.slot]))
 		var/datum/ego_gifts/removed_gift = ego_gift_list[given.slot]
+		if(removed_gift.locked)
+			return
 		removed_gift.Remove(src)
 	given.Initialize(src)
 	if(istype(ego_gift_list[LEFTBACK], /datum/ego_gifts/paradise) && istype(ego_gift_list[RIGHTBACK], /datum/ego_gifts/twilight)) // If you have both, makes them not overlap
 		var/datum/ego_gifts/twilight/right_wing = ego_gift_list[RIGHTBACK] // Have to do this messier because the gift_list isnt' a defined type... pain
 		var/datum/ego_gifts/paradise/left_wing = ego_gift_list[LEFTBACK]
+		src.cut_overlay(mutable_appearance(left_wing.icon, left_wing.icon_state, left_wing.layer))
+		src.cut_overlay(mutable_appearance(right_wing.icon, right_wing.icon_state, right_wing.layer))
 		left_wing.icon_state = "paradiselost_x"
 		right_wing.icon_state = "twilight_x"
+		src.add_overlay(mutable_appearance(left_wing.icon, left_wing.icon_state, left_wing.layer))
+		src.add_overlay(mutable_appearance(right_wing.icon, right_wing.icon_state, right_wing.layer))
 	else
 		if(istype(ego_gift_list[LEFTBACK], /datum/ego_gifts/paradise)) // If one gets overwritten it fixes them
 			var/datum/ego_gifts/paradise/left_wing = ego_gift_list[LEFTBACK]
+			src.cut_overlay(mutable_appearance(left_wing.icon, left_wing.icon_state, left_wing.layer))
 			left_wing.icon_state = "paradiselost"
+			src.add_overlay(mutable_appearance(left_wing.icon, left_wing.icon_state, left_wing.layer))
 		if(istype(ego_gift_list[RIGHTBACK], /datum/ego_gifts/twilight))
 			var/datum/ego_gifts/twilight/right_wing = ego_gift_list[RIGHTBACK]
+			src.cut_overlay(mutable_appearance(right_wing.icon, right_wing.icon_state, right_wing.layer))
 			right_wing.icon_state = "twilight"
+			src.add_overlay(mutable_appearance(right_wing.icon, right_wing.icon_state, right_wing.layer))
+
+/// Empty EGO GIFT Slot
+/datum/ego_gifts/empty
+	name = "Empty"
+	desc = "An empty slot for gifts."
+	icon_state = null
 
 /// All Zayin EGO Gifts
 /datum/ego_gifts/soda
@@ -82,6 +180,7 @@
 
 /datum/ego_gifts/penitence
 	name = "Penitence"
+	desc = "Provides a 10% bonus to works with corresponding abnormality."
 	icon_state = "penitence"
 	prudence_bonus = 2
 	slot = HAT
@@ -116,6 +215,14 @@
 	icon_state = "standard"
 	fortitude_bonus = 2
 	prudence_bonus = 2
+	slot = HAT
+
+/datum/ego_gifts/bunny
+	name = "Bunny Rabbit"
+	icon_state = "bunny"
+	fortitude_bonus = -2
+	prudence_bonus = -2
+	temperance_bonus = 6
 	slot = HAT
 
 /datum/ego_gifts/redeyes
@@ -187,6 +294,27 @@
 	prudence_bonus = 4 // Because fuck you, this can kill you if you have 56+ prudence and don't pay attention
 	slot = NECKWEAR
 
+/datum/ego_gifts/shy
+	name = "Today's Expression"
+	icon_state = "shy"
+	prudence_bonus = -2
+	temperance_bonus = 4
+	slot = EYE
+
+/datum/ego_gifts/cute
+	name = "SO CUTE!!!"
+	icon_state = "cute"
+	fortitude_bonus = 4
+	temperance_bonus = -2
+	slot = HAT
+
+/datum/ego_gifts/bean
+	name = "Magic Bean"
+	icon_state = "bean"
+	prudence_bonus = 2
+	temperance_bonus = 2
+	slot = HAT
+
 /// All HE EGO Gifts
 /datum/ego_gifts/loggging
 	name = "Logging"
@@ -236,6 +364,13 @@
 	prudence_bonus = 2
 	justice_bonus = 2
 	slot = MOUTH_1
+
+/datum/ego_gifts/totalitarianism
+	name = "Totalitarianism"
+	icon_state = "totalitarianism"
+	fortitude_bonus = 2
+	temperance_bonus = 2
+	slot = CHEEK
 
 /datum/ego_gifts/prank
 	name = "Funny Prank"
@@ -295,6 +430,21 @@
 	temperance_bonus = 1
 	justice_bonus = 1
 	slot = RIGHTBACK
+
+/datum/ego_gifts/courage_cat //crumbling armor also has an ego gift called courage so the name has to be slightly different
+	name = "Courage"
+	icon_state = "courage_cat"
+	fortitude_bonus = 4
+	justice_bonus = -4 //people will hate that one for sure
+	insight_mod = 6
+	slot = EYE
+
+/datum/ego_gifts/song
+	name = "Song of the Past"
+	icon_state = "song"
+	prudence_bonus = 2
+	justice_bonus = 2
+	slot = CHEEK
 
 /// All WAW EGO Gifts
 /datum/ego_gifts/correctional
@@ -367,6 +517,40 @@
 	temperance_bonus = 2 // This is techincally a buff from base game.
 	slot = HAT
 
+/datum/ego_gifts/stem
+	name = "Green Stem"
+	icon_state = "green_stem"
+	prudence_bonus = 6 //originally a SP bonus
+	slot = BROOCH
+
+/datum/ego_gifts/exuviae
+	name = "Exuviae"
+	icon_state = "exuviae"
+	prudence_bonus = 2
+	fortitude_bonus = 5
+	slot = HAND_2
+
+/datum/ego_gifts/warring
+	name = "Feather of Valor"
+	icon_state = "warring"
+	fortitude_bonus = 2
+	justice_bonus = 4
+	slot = HAT
+
+/datum/ego_gifts/regent
+	name = "Black Regent"
+	icon_state = "regent"
+	prudence_bonus = 4
+	justice_bonus = 2
+	slot = NECKWEAR
+
+/datum/ego_gifts/feather
+	name = "Feather of Honor"
+	icon_state = "feather"
+	prudence_bonus = 2
+	justice_bonus = 4
+	slot = HAT
+
 /// All ALEPH EGO Gifts
 /datum/ego_gifts/paradise
 	name = "Paradise Lost"
@@ -419,6 +603,7 @@
 
 /datum/ego_gifts/blossoming
 	name = "100 Paper Flowers"
+	desc = "Provides the user with 10% resistance to all damage sources."
 	icon_state = "blooming"
 	justice_bonus = 8
 	slot = SPECIAL
@@ -449,6 +634,7 @@
 
 /datum/ego_gifts/blessing
 	name = "Blessing"
+	desc = "Provides the user with 20% resistance to PALE damage."
 	icon_state = "blessing"
 	fortitude_bonus = 4
 	prudence_bonus = 4

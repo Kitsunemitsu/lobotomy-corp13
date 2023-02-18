@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/abnormality/scarecrow
-	name = "Scarecrow searchin for wisdom"
+	name = "Scarecrow Searching for Wisdom"
 	desc = "An abnormality taking form of a scarecrow with metal rake in place of its hand."
 	icon = 'ModularTegustation/Teguicons/32x48.dmi'
 	icon_state = "scarecrow"
@@ -9,7 +9,7 @@
 	maxHealth = 1000
 	health = 1000
 	rapid_melee = 2
-	move_to_delay = 2
+	move_to_delay = 3
 	damage_coeff = list(BRUTE = 1, RED_DAMAGE = 0.8, WHITE_DAMAGE = 0.5, BLACK_DAMAGE = 1.2, PALE_DAMAGE = 2)
 	melee_damage_lower = 20
 	melee_damage_upper = 24
@@ -84,19 +84,17 @@
 				QDEL_NULL(O)
 			finishing = FALSE
 
-/mob/living/simple_animal/hostile/abnormality/scarecrow/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/scarecrow/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/scarecrow/work_complete(mob/living/carbon/human/user, work_type, pe, work_time)
+/mob/living/simple_animal/hostile/abnormality/scarecrow/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
 	if(get_attribute_level(user, PRUDENCE_ATTRIBUTE) >= 60)
 		datum_reference.qliphoth_change(-1)
-	return ..()
+	return
 
-/mob/living/simple_animal/hostile/abnormality/scarecrow/breach_effect(mob/living/carbon/human/user)
+/mob/living/simple_animal/hostile/abnormality/scarecrow/BreachEffect(mob/living/carbon/human/user)
 	..()
 	icon_living = "scarecrow_breach"
 	icon_state = icon_living
 	GiveTarget(user)
-
-

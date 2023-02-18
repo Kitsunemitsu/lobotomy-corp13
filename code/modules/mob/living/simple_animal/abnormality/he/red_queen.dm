@@ -9,12 +9,12 @@
 	health = 650
 	threat_level = HE_LEVEL
 	work_chances = list(
-		ABNORMALITY_WORK_INSTINCT = 60,
-		ABNORMALITY_WORK_INSIGHT = 60,
-		ABNORMALITY_WORK_ATTACHMENT = 60,
-		ABNORMALITY_WORK_REPRESSION = 60
+		ABNORMALITY_WORK_INSTINCT = 65,
+		ABNORMALITY_WORK_INSIGHT = 65,
+		ABNORMALITY_WORK_ATTACHMENT = 65,
+		ABNORMALITY_WORK_REPRESSION = 65
 		)
-	work_damage_amount = 30			//Unlikely to hurt you but if she ever does she'll fuck you
+	work_damage_amount = 20			//Unlikely to hurt you but if she ever does she'll fuck you
 	work_damage_type = RED_DAMAGE
 
 	ego_list = list(
@@ -31,8 +31,7 @@
 	//Pick it once so people can find out
 	liked = pick(ABNORMALITY_WORK_INSTINCT, ABNORMALITY_WORK_INSIGHT, ABNORMALITY_WORK_ATTACHMENT, ABNORMALITY_WORK_REPRESSION)
 
-/mob/living/simple_animal/hostile/abnormality/red_queen/work_complete(mob/living/carbon/human/user, work_type, pe)
-	..()
+/mob/living/simple_animal/hostile/abnormality/red_queen/PostWorkEffect(mob/living/carbon/human/user, work_type, pe)
 	if(work_type != liked)
 		if(prob(20))
 			//The Red Queen is fickle, if you're unlucky, fuck you.

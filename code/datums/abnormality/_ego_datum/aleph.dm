@@ -1,7 +1,7 @@
 // White night - Paradise lost
 /datum/ego_datum/armor/paradise
 	item_path = /obj/item/clothing/suit/armor/ego_gear/paradise
-	cost = 250
+	cost = 200
 
 // Judgement bird - Justitia
 /datum/ego_datum/weapon/justitia
@@ -73,4 +73,32 @@
 // CENSORED - CENSORED
 /datum/ego_datum/weapon/censored
 	item_path = /obj/item/ego_weapon/censored
-	cost = 200
+	cost = 100
+
+/datum/ego_datum/armor/censored
+	item_path = /obj/item/clothing/suit/armor/ego_gear/censored
+	cost = 100
+
+// The King Of Greed - Gold Rush
+/datum/ego_datum/weapon/goldrush
+	item_path = /obj/item/ego_weapon/goldrush
+	cost = 100
+	
+// Titania - Soulmate
+/datum/ego_datum/weapon/soulmate
+	item_path = /obj/item/ego_weapon/soulmate
+	cost = 100
+
+/datum/ego_datum/armor/soulmate
+	item_path = /obj/item/clothing/suit/armor/ego_gear/soulmate
+	cost = 100
+
+// Lady out of Space - Out of Space
+/datum/ego_datum/armor/space
+	item_path = /obj/item/clothing/suit/armor/ego_gear/space
+	cost = 100
+
+/datum/ego_datum/weapon/space
+	item_path = /obj/item/ego_weapon/space
+	cost = 100
+

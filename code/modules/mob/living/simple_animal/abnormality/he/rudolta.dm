@@ -27,6 +27,8 @@
 						)
 	work_damage_amount = 10
 	work_damage_type = WHITE_DAMAGE
+	friendly_verb_continuous = "scorns"
+	friendly_verb_simple = "scorns"
 
 	ego_list = list(
 		/datum/ego_datum/weapon/christmas,
@@ -34,17 +36,20 @@
 		)
 	gift_type =  /datum/ego_gifts/christmas
 	var/pulse_cooldown
-	var/pulse_cooldown_time = 3 SECONDS
-	var/pulse_damage = 20 // Scales with distance
+	var/pulse_cooldown_time = 1.8 SECONDS
+	var/pulse_damage = 20
 
-/mob/living/simple_animal/hostile/abnormality/rudolta/neutral_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/rudolta/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(40))
 		datum_reference.qliphoth_change(-1)
 	return
 
-/mob/living/simple_animal/hostile/abnormality/rudolta/failure_effect(mob/living/carbon/human/user, work_type, pe)
+/mob/living/simple_animal/hostile/abnormality/rudolta/FailureEffect(mob/living/carbon/human/user, work_type, pe)
 	if(prob(80))
 		datum_reference.qliphoth_change(-1)
+	return
+
+/mob/living/simple_animal/hostile/abnormality/rudolta/PickTarget(list/Targets) // We attack corpses first if there are any
 	return
 
 /mob/living/simple_animal/hostile/abnormality/rudolta/Life()
@@ -59,8 +64,6 @@
 
 /mob/living/simple_animal/hostile/abnormality/rudolta/proc/WhitePulse()
 	pulse_cooldown = world.time + pulse_cooldown_time
-	if(prob(25))
-		new /obj/effect/gibspawner/generic/silent(get_turf(src))
 	playsound(src, 'sound/abnormalities/rudolta/throw.ogg', 50, FALSE, 4)
 	for(var/mob/living/L in livinginview(8, src))
 		if(faction_check_mob(L))

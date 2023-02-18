@@ -1,12 +1,11 @@
-// ALEPH armor, go wild, but attempt to keep total armor at ~245 total.
-// Paradise lost and Twilight are the only exceptions.
+// ALEPH armor, go wild, but attempt to keep total armor at ~240 total.
 
 /obj/item/clothing/suit/armor/ego_gear/paradise
 	name = "paradise lost"
 	desc = "\"My loved ones, do not worry; I have heard your prayers. \
 	Have you not yet realized that pain is but a speck to a determined mind?\""
 	icon_state = "paradise"
-	armor = list(RED_DAMAGE = 80, WHITE_DAMAGE = 80, BLACK_DAMAGE = 80, PALE_DAMAGE = 80) // 320
+	armor = list(RED_DAMAGE = 70, WHITE_DAMAGE = 70, BLACK_DAMAGE = 70, PALE_DAMAGE = 70) // 280
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 100,
 							PRUDENCE_ATTRIBUTE = 100,
@@ -18,7 +17,7 @@
 	name = "justitia"
 	desc = "A black, bandaged coat with golden linings covering it."
 	icon_state = "justitia"
-	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 60, BLACK_DAMAGE = 50, PALE_DAMAGE = 75) // 245
+	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 50, BLACK_DAMAGE = 50, PALE_DAMAGE = 80) // 240
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 80,
 							PRUDENCE_ATTRIBUTE = 80,
@@ -31,7 +30,7 @@
 	desc = "At the heart of the armor is a shard that emits an arcane gleam. \
 	The gentle glow feels somehow more brilliant than a flashing light."
 	icon_state = "star"
-	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 75, BLACK_DAMAGE = 60, PALE_DAMAGE = 50) // 245
+	armor = list(RED_DAMAGE = 70, WHITE_DAMAGE = 70, BLACK_DAMAGE = 60, PALE_DAMAGE = 40) // 240
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 80,
 							PRUDENCE_ATTRIBUTE = 100,
@@ -44,7 +43,7 @@
 	desc = "A splendid tailcoat perfect for a symphony. \
 	Superb leadership is required to create a perfect ensemble."
 	icon_state = "da_capo"
-	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 100, BLACK_DAMAGE = 60, PALE_DAMAGE = 25) // 245
+	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 100, BLACK_DAMAGE = 60, PALE_DAMAGE = 20) // 240
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 80,
 							PRUDENCE_ATTRIBUTE = 100,
@@ -57,18 +56,6 @@
 	desc = "It takes human hide to protect human flesh. To protect humans, you need something made out of humans."
 	icon_state = "mimicry"
 	armor = list(RED_DAMAGE = 90, WHITE_DAMAGE = 50, BLACK_DAMAGE = 50, PALE_DAMAGE = 50) // 240
-	attribute_requirements = list(
-							FORTITUDE_ATTRIBUTE = 100,
-							PRUDENCE_ATTRIBUTE = 80,
-							TEMPERANCE_ATTRIBUTE = 80,
-							JUSTICE_ATTRIBUTE = 80
-							)
-
-/obj/item/clothing/suit/armor/ego_gear/goldexperience
-	name = "gold experience"
-	desc = "A jacket made of gold is hardly light. But it shines like the sun."
-	icon_state = "gold_experience"
-	armor = list(RED_DAMAGE = 80, WHITE_DAMAGE = 40, BLACK_DAMAGE = 60, PALE_DAMAGE = 60) // 240
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 100,
 							PRUDENCE_ATTRIBUTE = 80,
@@ -145,7 +132,7 @@
 	name = "praetorian"
 	desc = "The queen's last line of defense."
 	icon_state = "praetorian"
-	armor = list(RED_DAMAGE = 70, WHITE_DAMAGE = 70, BLACK_DAMAGE = 50, PALE_DAMAGE = 50)
+	armor = list(RED_DAMAGE = 80, WHITE_DAMAGE = 60, BLACK_DAMAGE = 60, PALE_DAMAGE = 40)	//Armor was made before the abnormality.
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 100,
 							PRUDENCE_ATTRIBUTE = 80,
@@ -160,6 +147,43 @@
 	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 60, BLACK_DAMAGE = 60, PALE_DAMAGE = 60)
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 80,
+							PRUDENCE_ATTRIBUTE = 80,
+							TEMPERANCE_ATTRIBUTE = 80,
+							JUSTICE_ATTRIBUTE = 80
+							)
+
+/obj/item/clothing/suit/armor/ego_gear/censored
+	name = "CENSORED"
+	desc = "Goodness, that’s disgusting."
+	icon_state = "censored"
+	armor = list(RED_DAMAGE = 60, WHITE_DAMAGE = 40, BLACK_DAMAGE = 80, PALE_DAMAGE = 60)
+	attribute_requirements = list(
+							FORTITUDE_ATTRIBUTE = 100,
+							PRUDENCE_ATTRIBUTE = 80,
+							TEMPERANCE_ATTRIBUTE = 80,
+							JUSTICE_ATTRIBUTE = 80
+							)
+
+/obj/item/clothing/suit/armor/ego_gear/soulmate
+	name = "Soulmate"
+	desc = "I’ll follow thee and make a heaven of hell, to die upon the hand I love so well."
+	icon_state = "soulmate"
+	armor = list(RED_DAMAGE = 80, WHITE_DAMAGE = 50, BLACK_DAMAGE = 40, PALE_DAMAGE = 70)
+	attribute_requirements = list(
+							FORTITUDE_ATTRIBUTE = 100,
+							PRUDENCE_ATTRIBUTE = 80,
+							TEMPERANCE_ATTRIBUTE = 80,
+							JUSTICE_ATTRIBUTE = 80
+							)
+
+
+/obj/item/clothing/suit/armor/ego_gear/space
+	name = "out of space"
+	desc = "It was just a colour out of space, a frightful messenger from unformed realms of infinity beyond all Nature as we know it."
+	icon_state = "space"
+	armor = list(RED_DAMAGE = 30, WHITE_DAMAGE = 80, BLACK_DAMAGE = 80, PALE_DAMAGE = 50)
+	attribute_requirements = list(
+							FORTITUDE_ATTRIBUTE = 100,
 							PRUDENCE_ATTRIBUTE = 80,
 							TEMPERANCE_ATTRIBUTE = 80,
 							JUSTICE_ATTRIBUTE = 80

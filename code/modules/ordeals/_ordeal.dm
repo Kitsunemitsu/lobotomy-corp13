@@ -3,6 +3,8 @@
 	var/name = "Dawn of Death"
 	/// Level from 1 to 4. It only answers for the order of the ordeals happening, so ordeal 1 will be first and so on.
 	var/level = 0
+	/// Added meltdown delay. The higher it is - the longer it'll take for the ordeal to occur. If null - uses level.
+	var/delay = null
 	/// Announcement text. Self-explanatory
 	var/annonce_text = "Oh my god we're going to die!"
 	/// Sound to play on announcement, if any
@@ -17,6 +19,11 @@
 	var/color = COLOR_VERY_LIGHT_GRAY
 	/// If ordeal can be normally chosen
 	var/can_run = TRUE
+
+/datum/ordeal/New()
+	..()
+	if(delay == null)
+		delay = level
 
 // Runs the event itself
 /datum/ordeal/proc/Run()
@@ -36,6 +43,8 @@
 		for(var/mob/M in GLOB.player_list)
 			if(M.client)
 				M.playsound_local(get_turf(M), end_sound, 35, 0)
+	if(level == 4 && !istype(SSlobotomy_corp.core_suppression) && !LAZYLEN(SSlobotomy_corp.available_core_suppressions))
+		addtimer(CALLBACK(SSlobotomy_corp, /datum/controller/subsystem/lobotomy_corp/proc/PickPotentialSuppressions), 5 SECONDS)
 	qdel(src)
 	return
 
@@ -44,3 +53,16 @@
 	if(!ordeal_mobs.len)
 		End()
 	return
+
+/// Returns the type of ordeal without spoilering the color; Basically level2name kind of proc.
+/datum/ordeal/proc/ReturnSecretName()
+	switch(level)
+		if(1, 6)
+			return "Dawn"
+		if(2, 7)
+			return "Noon"
+		if(3, 8)
+			return "Dusk"
+		if(4, 9)
+			return "Midnight"
+	return "Unknown"

@@ -381,7 +381,7 @@
 
 /obj/item/storage/belt/military
 	name = "chest rig"
-	desc = "A set of tactical webbing worn by Syndicate boarding parties."
+	desc = "A set of tactical webbing worn by outskirts reconnaissance parties."
 	icon_state = "militarywebbing"
 	inhand_icon_state = "militarywebbing"
 	worn_icon_state = "militarywebbing"
@@ -745,3 +745,27 @@
 		/obj/item/shovel/spade,
 		/obj/item/gun/energy/floragun
 		))
+
+/obj/item/storage/belt/ego
+	name = "ego small arms belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
+	desc = "Holds various small ego weapons, such as pistols and daggers."
+	icon_state = "security"
+	inhand_icon_state = "security"
+	worn_icon_state = "security"
+	content_overlays = FALSE
+	custom_premium_price = PAYCHECK_MEDIUM * 2
+	drop_sound = 'sound/items/handling/toolbelt_drop.ogg'
+	pickup_sound =  'sound/items/handling/toolbelt_pickup.ogg'
+	w_class = WEIGHT_CLASS_BULKY
+
+/obj/item/storage/belt/ego/ComponentInitialize()
+	. = ..()
+	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
+	STR.max_items = 4
+	STR.max_w_class = WEIGHT_CLASS_BULKY
+	STR.max_combined_w_class = 100
+	STR.set_holdable(list(
+		/obj/item/gun/ego_gun/pistol,
+		/obj/item/ego_weapon/mini
+		))
+
