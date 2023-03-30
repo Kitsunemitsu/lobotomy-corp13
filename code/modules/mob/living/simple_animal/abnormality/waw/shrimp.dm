@@ -7,7 +7,7 @@
 	icon_living = "executive"
 	faction = list("neutral")
 	speak_emote = list("burbles")
-	threat_level = WAW_LEVEL
+	threat_level = HE_LEVEL
 	start_qliphoth = 1
 	work_chances = list(
 						ABNORMALITY_WORK_INSTINCT = 30,
