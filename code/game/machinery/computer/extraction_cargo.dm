@@ -1,9 +1,8 @@
 #define CAT_GADGET 1
 #define CAT_EQUIP 2
 #define CAT_MEDICAL 3
-#define CAT_SCORP 4
-#define CAT_RESOURCE 5
-#define CAT_OTHER 6
+#define CAT_RESOURCE 4
+#define CAT_OTHER 5
 //CONSOLE CODE uses a altered form of mining_vendor
 
 /obj/machinery/computer/extraction_cargo
@@ -28,13 +27,13 @@
 		new /datum/data/extraction_cargo("Instant Clerkbot Constructor ",/obj/item/powered_gadget/clerkbot_gadget,							250, CAT_GADGET) = 1,
 		//new /datum/data/extraction_cargo("C-Fear Protection Injector ",	/obj/item/trait_injector/clerk_fear_immunity_injector,						300, CAT_GADGET) = 1,
 		new /datum/data/extraction_cargo("Handheld Taser",				/obj/item/powered_gadget/handheld_taser,							300, CAT_GADGET) = 1,
-		new /datum/data/extraction_cargo("Shrimp Injector ",			/obj/item/trait_injector/shrimp_injector,										300, CAT_GADGET) = 1,
+		new /datum/data/extraction_cargo("Shrimp Injector ",			/obj/item/trait_injector/shrimp_injector,							300, CAT_GADGET) = 1,
 		new /datum/data/extraction_cargo("EMAIS	Autoinjector ",			/obj/item/reagent_containers/hypospray/emais,						300, CAT_GADGET) = 1,
 		new /datum/data/extraction_cargo("W-Corp Teleporter ",			/obj/item/powered_gadget/teleporter,								300, CAT_GADGET) = 1,
-		new /datum/data/extraction_cargo("Officer Upgrade Injector ",	/obj/item/trait_injector/officer_upgrade_injector,								400, CAT_GADGET) = 1,
+		new /datum/data/extraction_cargo("Officer Upgrade Injector ",	/obj/item/trait_injector/officer_upgrade_injector,					400, CAT_GADGET) = 1,
 		new /datum/data/extraction_cargo("Meson Scanner Goggles ",		/obj/item/clothing/glasses/meson,									500, CAT_GADGET) = 1,
 		new /datum/data/extraction_cargo("Gar Meson Scanner Goggles ",	/obj/item/clothing/glasses/meson/gar,								600, CAT_GADGET) = 1,
-		new /datum/data/extraction_cargo("Agent Work Chance Injector ",	/obj/item/trait_injector/agent_workchance_trait_injector,						700, CAT_GADGET) = 1,
+		new /datum/data/extraction_cargo("Agent Work Chance Injector ",	/obj/item/trait_injector/agent_workchance_trait_injector,			700, CAT_GADGET) = 1,
 
 		//Equipment - Passive equipment, or less technical stuff.
 		new /datum/data/extraction_cargo("'Seclite' Flashlight ",		/obj/item/flashlight/seclite,										30, CAT_EQUIP) = 1,
@@ -58,16 +57,6 @@
 		new /datum/data/extraction_cargo("Naked Nest Cure Vial ",		/obj/item/serpentspoision,											400, CAT_MEDICAL) = 1,
 		new /datum/data/extraction_cargo("Prosthetic Limb Crate ",		/obj/structure/closet/crate/freezer/surplus_limbs,					500, CAT_MEDICAL) = 1,
 		new /datum/data/extraction_cargo("Assorted Medi-Pen Kit ",		/obj/item/storage/firstaid/revival,									500, CAT_MEDICAL) = 1,
-
-		//Scorp - for the funny
-		new /datum/data/extraction_cargo("Wellcheers Code Red ",		/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_red,	150, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("Wellcheers Baja Blast ",		/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_white,150, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("Wellcheers Purple Thunder ",	/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_purple,200, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("S-Corp Elite Assassin ",		/mob/living/simple_animal/hostile/shrimp,							200, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("S-Corp Brand Soda Shotgun ",	/obj/item/gun/ego_gun/sodashotty,									400, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("S-Corp Brand Soda Rifle ",	/obj/item/gun/ego_gun/sodarifle,									400, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("S-Corp Brand Soda SMG ",		/obj/item/gun/ego_gun/sodasmg,										400, CAT_SCORP) = 1,
-		new /datum/data/extraction_cargo("S-Corp Brand Shrimp Squad ",	/obj/item/grenade/spawnergrenade/shrimp,							800, CAT_SCORP) = 1,
 
 		//Resources - Raw PE, ETC. Abnochem stuff goes here too. This is one use items to further LC13 systems
 		new /datum/data/extraction_cargo("Blue Filter ",				/obj/item/refiner_filter/blue,										10, CAT_RESOURCE) = 1,
@@ -169,16 +158,13 @@
 		if(3)
 			return "Medical"
 		if(4)
-			return "SCorp"
-		if(5)
 			return "Resources"
-		if(6)
+		if(5)
 			return "Misc"
 
 
 #undef CAT_GADGET
 #undef CAT_EQUIP
 #undef CAT_MEDICAL
-#undef CAT_SCORP
 #undef CAT_RESOURCE
 #undef CAT_OTHER

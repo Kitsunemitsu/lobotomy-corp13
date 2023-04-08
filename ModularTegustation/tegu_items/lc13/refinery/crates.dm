@@ -122,14 +122,15 @@
 		/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_red,
 		/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_white,
 		/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_purple,
-		/obj/item/gun/ego_gun/sodashotty,
-		/obj/item/gun/ego_gun/sodarifle,
-		/obj/item/gun/ego_gun/sodasmg
+		/obj/item/gun/ego_gun/shrimp/shotty,
+		/obj/item/gun/ego_gun/shrimp,
+		/obj/item/gun/ego_gun/shrimp/smg
 		)
 
 	rareloot =	list(
 		/mob/living/simple_animal/hostile/shrimp,
-		/obj/item/grenade/spawnergrenade/shrimp)
+		/obj/item/grenade/spawnergrenade/shrimp,
+		/obj/item/gun/ego_gun/shrimp/minigun)
 
 
 //W Corporation

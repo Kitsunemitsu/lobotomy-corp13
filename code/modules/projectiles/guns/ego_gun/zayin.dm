@@ -6,8 +6,9 @@
 	worn_icon_state = "gun"
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
-	ammo_type = /obj/item/ammo_casing/caseless/ego_tough
+	ammo_type = /obj/item/ammo_casing/caseless/ego_white
 	burst_size = 1
+	projectile_damage_multiplier = 12
 	fire_delay = 10
 	fire_sound = 'sound/weapons/gun/pistol/shot.ogg'
 	vary_fire_sound = FALSE
@@ -27,7 +28,8 @@
 	desc = "A pistol painted in a refreshing purple. Whenever this EGO is used, a faint scent of grapes wafts through the air."
 	icon_state = "soda"
 	inhand_icon_state = "soda"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_soda
+	projectile_damage_multiplier = 11
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	burst_size = 1
 	fire_delay = 10
 	fire_sound = 'sound/weapons/gun/pistol/shot.ogg'
@@ -44,7 +46,8 @@
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 	w_class = WEIGHT_CLASS_NORMAL
-	ammo_type = /obj/item/ammo_casing/caseless/ego_clerk
+	projectile_damage_multiplier = 5
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	burst_size = 1
 	fire_delay = 3
 	fire_sound = 'sound/weapons/gun/pistol/shot.ogg'
@@ -98,7 +101,8 @@
 	desc = "An old-looking pistol made of wood"
 	icon_state = "nostalgia"
 	inhand_icon_state = "nostalgia"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_nostalgia
+	projectile_damage_multiplier = 20
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	fire_delay = 20
 	fire_sound = 'sound/weapons/gun/pistol/shot.ogg'
 	vary_fire_sound = FALSE

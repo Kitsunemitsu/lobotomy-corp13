@@ -1,15 +1,3 @@
-/obj/item/ammo_casing/caseless/ego_correctional
-	name = "correctional casing"
-	desc = "A correctional casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_correctional
-	pellets = 8
-	variance = 20
-
-/obj/item/ammo_casing/caseless/ego_hornet
-	name = "hornet casing"
-	desc = "A hornet casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_hornet
-
 /obj/item/ammo_casing/caseless/ego_hatred
 	projectile_type = /obj/projectile/ego_bullet/ego_hatred
 
@@ -41,7 +29,7 @@
 /obj/item/ammo_casing/caseless/ego_executive
 	name = "executive casing"
 	desc = "An executive casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_executive
+	projectile_type = /obj/projectile/ego_bullet/ego_pale
 
 //The only justice scaling gun is a shitty 10 pale pistol
 /obj/item/ammo_casing/caseless/ego_executive/ready_proj(atom/target, mob/living/user, quiet, zone_override = "", atom/fired_from)
@@ -54,7 +42,7 @@
 /obj/item/ammo_casing/caseless/ego_crimson
 	name = "crimson casing"
 	desc = "A crimson casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_crimson
+	projectile_type = /obj/projectile/ego_bullet/ego_red
 	pellets = 3
 	variance = 14
 
@@ -72,16 +60,6 @@
 	name = "magic pistol casing"
 	desc = "A magic casing."
 	projectile_type = /obj/projectile/ego_bullet/ego_magicpistol
-
-/obj/item/ammo_casing/caseless/ego_laststop
-	name = "last stop casing"
-	desc = "A last stop casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_laststop
-
-/obj/item/ammo_casing/caseless/ego_intentions
-	name = "intentions casing"
-	desc = "intentions casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_intention
 
 /obj/item/ammo_casing/caseless/ego_aroma
 	name = "aroma casing"

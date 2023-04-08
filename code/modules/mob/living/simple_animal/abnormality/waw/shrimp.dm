@@ -55,9 +55,9 @@
 				/obj/item/grenade/spawnergrenade/shrimp,
 				/obj/item/grenade/spawnergrenade/shrimp/super,
 				/obj/item/gun/ego_gun/pistol/soda,
-				/obj/item/gun/ego_gun/sodasmg,
-				/obj/item/gun/ego_gun/sodashotty,
-				/obj/item/gun/ego_gun/sodarifle,
+				/obj/item/gun/ego_gun/shrimp/smg,
+				/obj/item/gun/ego_gun/shrimp/shotty,
+				/obj/item/gun/ego_gun/shrimp,
 				/obj/item/clothing/suit/armor/ego_gear/soda,
 				/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_red,
 				/obj/item/reagent_containers/food/drinks/soda_cans/wellcheers_white

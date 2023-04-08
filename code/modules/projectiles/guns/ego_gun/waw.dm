@@ -4,7 +4,8 @@
 	icon_state = "correctional"
 	inhand_icon_state = "correctional"
 	special = "This weapon fires 6 pellets."
-	ammo_type = /obj/item/ammo_casing/caseless/ego_correctional
+	projectile_damage_multiplier = 12
+	ammo_type = /obj/item/ammo_casing/caseless/ego_black
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 15
 	fire_sound = 'sound/weapons/gun/shotgun/shot_auto.ogg'
@@ -20,7 +21,8 @@
 	The projectiles relive the legacy of the kingdom as they travel toward the target."
 	icon_state = "hornet"
 	inhand_icon_state = "hornet"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_hornet
+	projectile_damage_multiplier = 29
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	weapon_weight = WEAPON_HEAVY
 	fire_sound = 'sound/weapons/gun/rifle/leveraction.ogg'
 	fire_delay = 5
@@ -39,6 +41,7 @@
 	icon_state = "hatred"
 	inhand_icon_state = "hatred"
 	special = "This weapon heals humans that it hits."
+	//This one has to be a snowflake one
 	ammo_type = /obj/item/ammo_casing/caseless/ego_hatred
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 15
@@ -63,6 +66,7 @@
 	special = "This weapon fires extremely slowly. \
 		This weapon pierces all targets. \
 		This weapon fires significantly faster wearing the matching armor"
+	projectile_damage_multiplier = 80
 	ammo_type = /obj/item/ammo_casing/caseless/ego_magicbullet
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 30	//Put on the armor, jackass.
@@ -89,7 +93,8 @@
 	Can feathers gain their own wings?"
 	icon_state = "solemnlament"
 	inhand_icon_state = "solemnlament"
-	special = "Firing both solemn lament and solemn vow at the same time will increase damage by 1.5x"
+	special = "Firing both solemn lament and solemn vow at the same time will increase damage by 33%"
+	projectile_damage_multiplier = 15
 	ammo_type = /obj/item/ammo_casing/caseless/ego_solemnlament
 	fire_delay = 5
 	fire_sound = 'sound/abnormalities/funeral/spiritgunwhite.ogg'
@@ -98,10 +103,10 @@
 
 /obj/item/gun/ego_gun/pistol/solemnlament/process_fire(atom/target, mob/living/user)
 	for(var/obj/item/gun/ego_gun/pistol/solemnvow/Vow in user.held_items)
-		projectile_damage_multiplier = 1.5
+		projectile_damage_multiplier = 20
 		break
 	..()
-	projectile_damage_multiplier = 1
+	projectile_damage_multiplier = 15
 
 
 /obj/item/gun/ego_gun/pistol/solemnvow
@@ -110,7 +115,8 @@
 	Even with wings, no feather can leave this place."
 	icon_state = "solemnvow"
 	inhand_icon_state = "solemnvow"
-	special = "Firing both solemn lament and solemn vow at the same time will increase damage by 1.5x"
+	special = "Firing both solemn lament and solemn vow at the same time will increase damage by 33%"
+	projectile_damage_multiplier = 15
 	ammo_type = /obj/item/ammo_casing/caseless/ego_solemnvow
 	fire_delay = 5
 	fire_sound = 'sound/abnormalities/funeral/spiritgunblack.ogg'
@@ -120,12 +126,13 @@
 
 /obj/item/gun/ego_gun/pistol/solemnvow/process_fire(atom/target, mob/living/user)
 	for(var/obj/item/gun/ego_gun/pistol/solemnlament/Lament in user.held_items)
-		projectile_damage_multiplier = 1.5
+		projectile_damage_multiplier = 20
 		break
 	..()
-	projectile_damage_multiplier = 1
+	projectile_damage_multiplier = 15
 
 
+//This is also a snowflake gun
 /obj/item/gun/ego_gun/loyalty
 	name = "loyalty"
 	desc = "Courtesy of the 16th Ego rifleman's brigade."
@@ -154,6 +161,7 @@
 		return
 
 //Just a funny gold soda pistol. It was originally meant to just be a golden meme weapon, now it is the only pale gun, lol
+//Executive also uses the funny meme bullets
 /obj/item/gun/ego_gun/pistol/soda/executive
 	name = "executive"
 	desc = "A pistol painted in black with a gold finish. Whenever this EGO is used, a faint scent of fillet mignon wafts through the air."
@@ -161,6 +169,7 @@
 	inhand_icon_state = "executive"
 	special = "This gun scales with justice."
 	fire_delay = 10
+	projectile_damage_multiplier = 10
 	ammo_type = /obj/item/ammo_casing/caseless/ego_executive
 	attribute_requirements = list(
 							JUSTICE_ATTRIBUTE = 80
@@ -172,6 +181,7 @@
 	desc = "With steel in one hand and gunpowder in the other, there's nothing to fear in this place."
 	icon_state = "crimsonscar"
 	inhand_icon_state = "crimsonscar"
+	projectile_damage_multiplier = 18
 	ammo_type = /obj/item/ammo_casing/caseless/ego_crimson
 	special = "This weapon fires 3 pellets."
 	fire_delay = 15
@@ -187,6 +197,7 @@
 	icon_state = "ecstasy"
 	inhand_icon_state = "ecstasy"
 	special = "This weapon fires slow bullets with limited range."
+	projectile_damage_multiplier = 7
 	ammo_type = /obj/item/ammo_casing/caseless/ego_ecstasy
 	weapon_weight = WEAPON_HEAVY
 	spread = 40
@@ -203,6 +214,7 @@
 	icon_state = "praetorian"
 	inhand_icon_state = "executive"
 	special = "This weapon fires IFF bullets."
+	projectile_damage_multiplier = 3
 	ammo_type = /obj/item/ammo_casing/caseless/ego_praetorian
 	fire_sound = 'sound/weapons/gun/pistol/tp17.ogg'
 	autofire = 0.12 SECONDS
@@ -218,6 +230,7 @@
 	icon_state = "magic_pistol"
 	inhand_icon_state = "magic_pistol"
 	special = "This weapon pierces all targets."
+	projectile_damage_multiplier = 40
 	ammo_type = /obj/item/ammo_casing/caseless/ego_magicpistol
 	fire_delay = 12
 	fire_sound = 'sound/abnormalities/freischutz/shoot.ogg'
@@ -230,7 +243,8 @@
 	desc = "There are no clocks to alert the arrival times."
 	icon_state = "laststop"
 	inhand_icon_state = "laststop"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_laststop
+	projectile_damage_multiplier = 145
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 10 SECONDS 	// I mean it's a derringer
 	fire_sound = 'sound/weapons/gun/shotgun/shot_auto.ogg'
@@ -243,7 +257,8 @@
 	desc = "Go ahead and rattle 'em boys."
 	icon_state = "intentions"
 	inhand_icon_state = "intentions"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_intentions
+	projectile_damage_multiplier = 5
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	weapon_weight = WEAPON_HEAVY
 	spread = 40
 	fire_sound = 'sound/weapons/gun/smg/mp7.ogg'
@@ -258,6 +273,7 @@
 			The arrowhead is dull and sprouts flowers of vivid color wherever it strikes."
 	icon_state = "aroma"
 	inhand_icon_state = "aroma"
+	projectile_damage_multiplier = 140
 	ammo_type = /obj/item/ammo_casing/caseless/ego_aroma
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 25
@@ -273,6 +289,7 @@
 	icon_state = "assonance"
 	inhand_icon_state = "assonance"
 	special = "This weapon fires a hitscan beam."
+	projectile_damage_multiplier = 50
 	ammo_type = /obj/item/ammo_casing/caseless/ego_assonance
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 10
@@ -287,6 +304,7 @@
 	desc = "A flaming, but very sharp, feather."
 	icon_state = "featherofhonor"
 	inhand_icon_state = "featherofhonor"
+	projectile_damage_multiplier = 40
 	ammo_type = /obj/item/ammo_casing/caseless/ego_feather
 	weapon_weight = WEAPON_HEAVY
 	special = "This weapon deals 35 white in melee."
@@ -304,6 +322,7 @@
 	desc = "A chunk of the naked nest inigrated with a launching mechanism."
 	icon_state = "exuviae"
 	inhand_icon_state = "exuviae"
+	projectile_damage_multiplier = 120
 	ammo_type = /obj/item/ammo_casing/caseless/ego_exuviae
 	weapon_weight = WEAPON_HEAVY
 	special = "Upon hit the targets RED vulnerability is increased by 0.2."
@@ -317,6 +336,7 @@
 	)
 
 //Full manual bow-type E.G.O, must be loaded before firing.
+//Bullet damage can be tied to the bullets heres
 /obj/item/gun/ego_gun/warring
 	name = "feather of valor"
 	desc = "A shimmering bow adorned with carved wooden panels. It crackes with arcing electricity."
@@ -383,6 +403,7 @@
 	icon_state = "banquet"
 	inhand_icon_state = "banquet"
 	special = "This weapon uses HP to fire."
+	projectile_damage_multiplier = 120
 	ammo_type = /obj/item/ammo_casing/caseless/ego_banquet
 	fire_delay = 26
 	fire_sound = 'sound/weapons/ego/cannon.ogg'

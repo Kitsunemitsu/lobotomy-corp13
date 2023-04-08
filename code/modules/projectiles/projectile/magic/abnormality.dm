@@ -128,3 +128,8 @@
 /datum/movespeed_modifier/clowned
 	variable = TRUE
 	multiplicative_slowdown = 1.5
+
+/obj/projectile/ego_bullet/ego_soda
+	name = "soda"
+	damage = 8
+	damage_type = RED_DAMAGE

@@ -3,7 +3,8 @@
 	desc = "The small accessory remains like the wishes of a child who yearned for happiness."
 	icon_state = "prank"
 	inhand_icon_state = "prank"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_prank
+	projectile_damage_multiplier = 42
+	ammo_type = /obj/item/ammo_casing/caseless/ego_black
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 10
 	damtype = BLACK_DAMAGE
@@ -18,7 +19,8 @@
 	desc = "A magnum pistol featuring excellent burst firing potential."
 	icon_state = "gaze"
 	inhand_icon_state = "executive"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_gaze
+	projectile_damage_multiplier = 70
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	fire_delay = 20
 	fire_sound = 'sound/weapons/gun/pistol/deagle.ogg'
 	vary_fire_sound = FALSE
@@ -34,6 +36,7 @@
 	icon_state = "galaxy"
 	special = "Use in hand to turn on homing mode. This mode fires slower, but homes in on a random target within 15 metres.	\
 			WARNING: This feature is not accurate."
+	projectile_damage_multiplier = 45
 	ammo_type =	/obj/item/ammo_casing/caseless/ego_galaxy
 	fire_delay = 15
 	fire_sound = 'sound/magic/wand_teleport.ogg'
@@ -67,7 +70,8 @@
 	special = "This weapon will sometimes jam. \
 			Use this weapon in hand to unjam it. \
 			this weapon fires faster and in a bigger burst for 15 seconds after being unjammed."
-	ammo_type = /obj/item/ammo_casing/caseless/ego_unrequited
+	projectile_damage_multiplier = 11
+	ammo_type = /obj/item/ammo_casing/caseless/ego_white
 	fire_delay = 3
 	burst_size = 3
 	fire_sound = 'sound/weapons/gun/l6/shot.ogg'
@@ -137,6 +141,7 @@
 	desc = "A massive blocky launcher with some suspicious stains on it."
 	icon_state = "harmony"
 	special = "This weapon fires bouncing, piercing shots."
+	projectile_damage_multiplier = 16
 	ammo_type = /obj/item/ammo_casing/caseless/ego_harmony
 	fire_sound = 'sound/weapons/ego/harmony1.ogg'
 	vary_fire_sound = FALSE
@@ -152,7 +157,8 @@
 	desc = "It's an old wooden longrifle."
 	icon_state = "transmission"
 	inhand_icon_state = "transmission"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_transmission
+	projectile_damage_multiplier = 42
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 10
 	fire_sound = 'sound/weapons/gun/rifle/shot_alt.ogg'
@@ -165,7 +171,8 @@
 	desc = "Nothing beats the classics."
 	icon_state = "song"
 	inhand_icon_state = "song"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_song
+	projectile_damage_multiplier = 6
+	ammo_type = /obj/item/ammo_casing/caseless/ego_white
 	fire_sound = 'sound/weapons/gun/pistol/shot_alt.ogg'
 	weapon_weight = WEAPON_HEAVY
 	spread = 8
@@ -180,6 +187,7 @@
 	icon_state = "songmini"
 	inhand_icon_state = "songmini"
 	special = "This weapon fires 3 pellets."
+	projectile_damage_multiplier = 2
 	ammo_type = /obj/item/ammo_casing/caseless/ego_songmini
 	fire_sound = 'sound/weapons/gun/revolver/shot_light.ogg'
 	spread = 8

@@ -1,13 +1,3 @@
-/obj/projectile/ego_bullet/ego_correctional
-	name = "correctional"
-	damage = 10
-	damage_type = BLACK_DAMAGE
-
-/obj/projectile/ego_bullet/ego_hornet
-	name = "hornet"
-	damage = 29
-	damage_type = RED_DAMAGE
-
 /obj/projectile/ego_bullet/ego_hatred
 	name = "magic beam"
 	icon_state = "qoh1"
@@ -45,7 +35,6 @@
 /obj/projectile/ego_bullet/ego_magicbullet
 	name = "magic bullet"
 	icon_state = "magic_bullet"
-	damage = 80
 	speed = 0.1
 	damage_type = BLACK_DAMAGE
 	flag = BLACK_DAMAGE
@@ -56,14 +45,12 @@
 /obj/projectile/ego_bullet/ego_solemnlament
 	name = "solemn lament"
 	icon_state = "whitefly"
-	damage = 18
 	speed = 0.35
 	damage_type = WHITE_DAMAGE
 
 /obj/projectile/ego_bullet/ego_solemnvow
 	name = "solemn vow"
 	icon_state = "blackfly"
-	damage = 18
 	speed = 0.35
 	damage_type = BLACK_DAMAGE
 
@@ -91,23 +78,11 @@
 	if(!ishuman(target))
 		qdel(src)
 
-/obj/projectile/ego_bullet/ego_executive
-	name = "executive"
-	damage = 10
-	damage_type = PALE_DAMAGE	//hehe
-
-
-/obj/projectile/ego_bullet/ego_crimson
-	name = "crimson"
-	damage = 18
-	damage_type = RED_DAMAGE
-
 /obj/projectile/ego_bullet/ego_ecstasy
 	name = "ecstasy"
 	icon_state = "ecstasy"
 	damage_type = WHITE_DAMAGE
 	flag = WHITE_DAMAGE
-	damage = 7
 	speed = 1.3
 	range = 6
 
@@ -119,7 +94,6 @@
 /obj/projectile/ego_bullet/ego_praetorian
 	name = "praetorian"
 	icon_state = "loyalty"
-	damage = 3
 	nodamage = TRUE	//Damage is calculated later
 	damage_type = RED_DAMAGE
 	flag = RED_DAMAGE
@@ -158,31 +132,14 @@
 /obj/projectile/ego_bullet/ego_magicpistol
 	name = "magic pistol"
 	icon_state = "magic_bullet"
-	damage = 40
 	speed = 0.1
 	damage_type = BLACK_DAMAGE
 	flag = BLACK_DAMAGE
 	projectile_piercing = PASSMOB
 
-//tommygun
-/obj/projectile/ego_bullet/ego_intention
-	name = "good intentions"
-	damage = 5
-	speed = 0.2
-	damage_type = RED_DAMAGE
-	flag = RED_DAMAGE
-
-//laststop
-/obj/projectile/ego_bullet/ego_laststop
-	name = "laststop"
-	damage = 145
-	damage_type = RED_DAMAGE
-	flag = RED_DAMAGE
-
 /obj/projectile/ego_bullet/ego_aroma
 	name = "aroma"
 	icon_state = "arrow_aroma"
-	damage = 140
 	damage_type = WHITE_DAMAGE
 	flag = WHITE_DAMAGE
 
@@ -191,7 +148,6 @@
 	name = "assonance"
 	icon_state = "omnilaser"
 	hitsound = null
-	damage = 50
 	damage_type = WHITE_DAMAGE
 	flag = WHITE_DAMAGE
 	hitscan = TRUE
@@ -205,7 +161,6 @@
 /obj/projectile/ego_bullet/ego_feather
 	name = "feather"
 	icon_state = "lava"
-	damage = 40
 	damage_type = WHITE_DAMAGE
 	flag = WHITE_DAMAGE
 	homing = TRUE
@@ -217,7 +172,6 @@
 	icon = 'ModularTegustation/Teguicons/tegumobs.dmi'
 	icon_state = "nakednest_serpent"
 	desc = "A sterile naked nest serpent"
-	damage = 120
 	damage_type = RED_DAMAGE
 	flag = RED_DAMAGE
 	hitsound = "sound/effects/wounds/pierce1.ogg"
@@ -275,6 +229,5 @@
 /obj/projectile/ego_bullet/ego_banquet
 	name = "banquet"
 	icon_state = "pulse0"
-	damage = 120
 	damage_type = BLACK_DAMAGE
 	flag = BLACK_DAMAGE

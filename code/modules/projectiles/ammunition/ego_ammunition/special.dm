@@ -8,11 +8,6 @@
 /obj/item/ammo_casing/caseless/ego_shrimpshotgun
 	name = "sodashotty casing"
 	desc = "A casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_soda
+	projectile_type = /obj/projectile/ego_bullet/ego_red
 	pellets = 3
 	variance = 12
-
-/obj/item/ammo_casing/caseless/ego_shrimprifle
-	name = "sodassniper casing"
-	desc = "A casing."
-	projectile_type = /obj/projectile/ego_bullet/ego_soda/rifle

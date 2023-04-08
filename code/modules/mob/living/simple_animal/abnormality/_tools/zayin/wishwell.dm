@@ -27,9 +27,9 @@
 		/obj/item/ego_weapon/flower_waltz
 		)
 	var/list/heitem = list(
-		/obj/item/gun/ego_gun/sodashotty,
-		/obj/item/gun/ego_gun/sodarifle,
-		/obj/item/gun/ego_gun/sodasmg,
+		/obj/item/gun/ego_gun/shrimp/shotty,
+		/obj/item/gun/ego_gun/shrimp,
+		/obj/item/gun/ego_gun/shrimp/smg,
 		/obj/item/clothing/suit/armor/ego_gear/lutemis,
 		/obj/item/grenade/spawnergrenade/shrimp,
 		/obj/item/clothing/neck/beads,

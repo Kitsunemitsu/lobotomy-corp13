@@ -1,3 +1,5 @@
+//Aleph guns need their special snowflake shit
+
 /obj/projectile/ego_bullet/ego_star
 	name = "star"
 	icon_state = "star"

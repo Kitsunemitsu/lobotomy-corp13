@@ -1,5 +1,5 @@
 /obj/projectile/ego_bullet
-	damage = 10
+	damage = 1	//Gun damage is set in the gun itse;f
 	damage_type = RED_DAMAGE
 	hitsound_wall = "ricochet"
 	impact_effect_type = /obj/effect/temp_visual/impact_effect

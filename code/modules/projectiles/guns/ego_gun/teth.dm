@@ -9,6 +9,7 @@
 	icon_state = "match"
 	inhand_icon_state = "match"
 	special = "This weapon does AOE damage."
+	projectile_damage_multiplier = 35
 	ammo_type = /obj/item/ammo_casing/caseless/ego_match
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 30
@@ -20,7 +21,8 @@
 	the weapon has high firepower despite its small size."
 	icon_state = "beak"
 	inhand_icon_state = "beak"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_beak
+	projectile_damage_multiplier = 4
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	weapon_weight = WEAPON_HEAVY
 	spread = 10
 	fire_sound = 'sound/weapons/gun/smg/mp7.ogg'
@@ -32,7 +34,8 @@
 	icon_state = "beakmagnum"
 	inhand_icon_state = "beak"
 	special = "This weapon has pinpoint accuracy when dual wielded."
-	ammo_type = /obj/item/ammo_casing/caseless/ego_beakmagnum
+	projectile_damage_multiplier = 30
+	ammo_type = /obj/item/ammo_casing/caseless/ego_red
 	fire_delay = 20
 	fire_sound = 'sound/weapons/gun/revolver/shot_alt.ogg'
 	vary_fire_sound = FALSE
@@ -45,6 +48,7 @@
 	icon_state = "noise"
 	inhand_icon_state = "noise"
 	special = "This weapon fires 5 pellets."
+	projectile_damage_multiplier = 10
 	ammo_type = /obj/item/ammo_casing/caseless/ego_noise
 	weapon_weight = WEAPON_HEAVY
 	fire_delay = 20
@@ -55,7 +59,8 @@
 	desc = "A classic blue revolver, that gives you feelings of loneliness."
 	icon_state = "solitude"
 	inhand_icon_state = "solitude"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_solitude
+	projectile_damage_multiplier = 40
+	ammo_type = /obj/item/ammo_casing/caseless/ego_white
 	fire_delay = 25
 	fire_sound = 'sound/weapons/gun/revolver/shot_light.ogg'
 	vary_fire_sound = FALSE
@@ -67,7 +72,8 @@
 	When throbbing emotions surge up from time to time, it's best to simply cover the face."
 	icon_state = "shy"
 	inhand_icon_state = "shy"
-	ammo_type = /obj/item/ammo_casing/caseless/ego_shy
+	projectile_damage_multiplier = 4
+	ammo_type = /obj/item/ammo_casing/caseless/ego_black
 	fire_sound = 'sound/effects/meatslap.ogg'
 	vary_fire_sound = FALSE
 	autofire = 0.2 SECONDS
@@ -77,6 +83,7 @@
 	desc = "And when the crying stops, dawn will break."
 	icon_state = "dream"
 	inhand_icon_state = "dream"
+	projectile_damage_multiplier = 6
 	ammo_type = /obj/item/ammo_casing/caseless/ego_dream
 	weapon_weight = WEAPON_HEAVY
 	fire_sound = "dreamy_gun"

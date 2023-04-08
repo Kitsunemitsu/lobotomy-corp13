@@ -60,6 +60,9 @@
 		to_chat(usr, display_text)
 
 /obj/item/gun/ego_gun/proc/EgoAttackInfo(mob/user)
+	if(projectile_damage_multiplier >= 2)
+		return "<span class='notice'>Its bullets deal [projectile_damage_multiplier] damage.</span>"
+
 	if(chambered && chambered.BB)
 		return "<span class='notice'>Its bullets deal [chambered.BB.damage] [chambered.BB.damage_type] damage.</span>"
 	return
