@@ -220,6 +220,12 @@
 	icon_state = "capitalism"
 	armor = list(RED_DAMAGE = 70, WHITE_DAMAGE = 80, BLACK_DAMAGE = 70, PALE_DAMAGE = 40)
 
+/obj/item/clothing/suit/armor/ego_gear/realization/silence
+	name = "dead silence"
+	desc = "I know of absolute solitude. I shared my silence, and now I take its price. Once the time comes and the original owner arrives, the price will be paid."
+	icon_state = "thirteen"
+	armor = list(RED_DAMAGE = 50, WHITE_DAMAGE = 40, BLACK_DAMAGE = 80, PALE_DAMAGE = 90)
+
 /* ALEPH Realizations */
 
 /obj/item/clothing/suit/armor/ego_gear/realization/alcoda
