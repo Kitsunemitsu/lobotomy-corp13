@@ -270,8 +270,10 @@
 	desc = "A crate recieved from the city workshop. Open with a Crowbar."
 	icon_state = "crate_allas"
 	rarechance = 20
+	veryrarechance = 1
 	lootlist =	list(
 		/obj/item/ego_weapon/city/fixerblade,
+		/obj/item/ego_weapon/city/fixergreatsword,
 		/obj/item/ego_weapon/city/yun,
 		/obj/item/ego_weapon/city/yun/shortsword,
 		/obj/item/ego_weapon/city/yun/chainsaw,
@@ -283,6 +285,9 @@
 		/obj/item/ego_weapon/city/molar,
 		/obj/item/ego_weapon/city/molar/olga,
 		)
+
+	veryrareloot =	list(
+		/obj/item/clothing/suit/armor/ego_gear/city/blue_reverb,)
 
 
 //Zelkova Workshop is the last one, Includes Dawn office, Wedge Office and Fullstop.
