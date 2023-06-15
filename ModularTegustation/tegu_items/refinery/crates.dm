@@ -287,7 +287,8 @@
 		)
 
 	veryrareloot =	list(
-		/obj/item/clothing/suit/armor/ego_gear/city/blue_reverb,)
+		/obj/item/clothing/suit/armor/ego_gear/city/blue_reverb,
+		/obj/item/ego_weapon/black_silence_gloves)
 
 
 //Zelkova Workshop is the last one, Includes Dawn office, Wedge Office and Fullstop.

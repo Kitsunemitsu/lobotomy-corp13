@@ -6,7 +6,7 @@
 //Grade 5
 /obj/item/ego_weapon/city/shi_association
 	name = "shi association sheathed blade"
-	desc = "A blade that is standard among blade lineage."
+	desc = "A blade that is used by Shi Section 2."
 	special = "Use this weapon in hand to immobilize yourself for 1 second, cut your HP by 10%, and deal 2x damage in pale."
 	icon_state = "shi_association"
 	force = 44

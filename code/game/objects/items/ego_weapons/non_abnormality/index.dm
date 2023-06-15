@@ -22,6 +22,10 @@
 
 /obj/item/ego_weapon/city/index/attack_self(mob/user)
 	..()
+	if(force != initial(force)
+		to_chat(user, "<span class='notice'>The prescript buff is still active.</span>")
+		return
+
 	//Okay, check if you have a prescript
 	if(prescript_target && user == weapon_owner)
 		var/mob/living/simple_animal/hostile/abnormality/Y = prescript_target
@@ -66,11 +70,11 @@
 /obj/item/ego_weapon/city/index/proc/prescript_complete(mob/living/user)
 	prescript_target = null
 	to_chat(user, "<span class='userdanger'>You have completed your prescript, and you have been graced.</span>")
-	force *= 1.3	//BEEG BONUS
+	force *= 1.45	//BEEG BONUS
 	addtimer(CALLBACK(src, .proc/Return, user), 5 MINUTES)
 
 /obj/item/ego_weapon/city/index/proc/Return(mob/living/carbon/human/user)
-	force /= 1.3	//BEEG BONUS
+	force /= 1.45	//BEEG BONUS
 	to_chat(user, "<span class='notice'>The power from your prescript is now gone.</span>")
 
 
