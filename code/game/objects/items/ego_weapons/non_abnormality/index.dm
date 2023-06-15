@@ -22,7 +22,7 @@
 
 /obj/item/ego_weapon/city/index/attack_self(mob/user)
 	..()
-	if(force != initial(force)
+	if(force != initial(force))
 		to_chat(user, "<span class='notice'>The prescript buff is still active.</span>")
 		return
 
