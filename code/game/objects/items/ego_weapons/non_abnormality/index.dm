@@ -84,6 +84,9 @@
 	desc = "A long sword used by index proxies."
 	icon_state = "indexlongsword"
 	inhand_icon_state = "indexlongsword"
+	attack_verb_continuous = list("slices", "slashes", "stabs")
+	attack_verb_simple = list("slice", "slash", "stab")
+	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 56
 	attribute_requirements = list(
 							FORTITUDE_ATTRIBUTE = 80,
@@ -98,6 +101,9 @@
 	desc = "A greatsword sword used by a specific index messenger."
 	icon_state = "indexgreatsword"
 	inhand_icon_state = "indexgreatsword"
+	attack_verb_continuous = list("cleaves", "cuts")
+	attack_verb_simple = list("cleaves", "cuts")
+	hitsound = 'sound/weapons/fixer/generic/finisher1.ogg'
 	force = 130
 	attack_speed = 2
 	attribute_requirements = list(
