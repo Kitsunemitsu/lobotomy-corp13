@@ -74,7 +74,7 @@ Rosespanner
 Gears - Apply damagetypes to weapons
 
 Jeong's Office
-Cut HP by 10%, next attack deals 7x damage
+Cut HP, next attack deals massive damage
 
 			Everything else.
 
@@ -111,4 +111,11 @@ Rifles that have a bayonet. Holds 8 shots, melee an enemy to load 4 rounds.
 Hana Association
 Pale equivalent to Seven and Zwei
 
+Leaflet Workshop
+Weapons that have a durability bar with good damage. When they break you need to spend about 30 Seconds fixing it, or you deal half damage.
+
+Liu Association
+Section 1/2 - Courage - More people around you the stronger it is. Use in hand for an AOE DOT that scales with number of people that are around you, and does not hurt them
+Section 5/6 - Combo string system, I > II > III. At each part of the string you can choose between one of two attacks
+All these weapons kill at 0 sanity.
 */
