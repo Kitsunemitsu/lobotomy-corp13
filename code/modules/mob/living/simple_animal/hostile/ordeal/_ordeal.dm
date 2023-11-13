@@ -30,7 +30,7 @@
 		ordeal_reference = null
 	..()
 
-//You should let these gib on Citymap
+//You should not let these gib on Citymap
 /mob/living/simple_animal/hostile/ordeal/Initialize()
 	..()
 	if(SSmaptype.maptype == "city")
