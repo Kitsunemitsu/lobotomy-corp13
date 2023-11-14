@@ -121,8 +121,8 @@
 	abno_code = "O-01-131"
 	abno_info = list(
 		"Injuries sustained when working on Lady Out of Space consisted of an equal amount of BLACK and WHITE damage.",
-		"When the work result was Neutral, the Qliphoth Counter decreased.",
-		"When the work result was Bad, the Qliphoth Counter decreased by 2.",
+		"When the work result was Neutral, the Qliphoth Counter decreased with a normal probability.",
+		"When the work result was Bad, the Qliphoth Counter decreased, and then at a normal probability, decreased again.",
 		"When employees of Level 4 and lower completed their work, the Qliphoth Counter decreased. The Counter decreased again if the employee was Level 3 and lower.",
 		"When employees of Level 2 and lower attempted work, they were consumed by Lady Out of Space and the Qliphoth Counter decreased.")
 	abno_work_damage_type = "White & Black"

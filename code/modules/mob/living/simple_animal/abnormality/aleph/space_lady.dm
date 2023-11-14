@@ -31,7 +31,7 @@
 	gift_type =  /datum/ego_gifts/space
 	abnormality_origin = ABNORMALITY_ORIGIN_ARTBOOK
 	ranged = TRUE
-	minimum_distance = 0
+	minimum_distance = 3
 	ranged_cooldown_time = 3 SECONDS
 
 	var/explosion_timer = 2 SECONDS
@@ -46,7 +46,8 @@
 	return ..()
 
 /mob/living/simple_animal/hostile/abnormality/space_lady/AttackingTarget(atom/attacked_target)
-	return OpenFire()
+	ExplodeTimer()
+	return
 
 
 /mob/living/simple_animal/hostile/abnormality/space_lady/OpenFire()
@@ -123,11 +124,14 @@
 	return TRUE
 
 /mob/living/simple_animal/hostile/abnormality/space_lady/FailureEffect(mob/living/carbon/human/user, work_type, pe)
-	datum_reference.qliphoth_change(-2)
+	datum_reference.qliphoth_change(-1)
+	if(prob(50))
+		datum_reference.qliphoth_change(-1)
 	return
 
 /mob/living/simple_animal/hostile/abnormality/space_lady/NeutralEffect(mob/living/carbon/human/user, work_type, pe)
-	datum_reference.qliphoth_change(-1)
+	if(prob(50))
+		datum_reference.qliphoth_change(-1)
 	return
 
 /mob/living/simple_animal/hostile/abnormality/space_lady/BreachEffect(mob/living/carbon/human/user)
