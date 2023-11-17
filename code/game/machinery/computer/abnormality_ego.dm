@@ -4,6 +4,7 @@
 	resistance_flags = INDESTRUCTIBLE
 	/// Currently selected(shown) level of abnormalities whose EGO will be on the interface
 	var/selected_level = ZAYIN_LEVEL
+	var/active = FALSE	//Are we currently extracting?
 
 /obj/machinery/computer/ego_purchase/ui_interact(mob/user)
 	. = ..()
@@ -56,13 +57,42 @@
 				to_chat(usr, "<span class='warning'>Not enough PE boxes stored for this operation.</span>")
 				playsound(get_turf(src), 'sound/machines/terminal_prompt_deny.ogg', 50, TRUE)
 				return FALSE
-			var/obj/item/I = new E.item_path(get_turf(src))
-			A.stored_boxes -= E.cost
-			A.current_ego += I
-			to_chat(usr, "<span class='notice'>[I] has been dispensed!</span>")
-			playsound(get_turf(src), 'sound/machines/terminal_prompt_confirm.ogg', 50, TRUE)
-			updateUsrDialog()
-			return TRUE
+			if(active)
+				to_chat(usr, "<span class='warning'>Console is already extracting.</span>")
+				playsound(get_turf(src), 'sound/machines/terminal_prompt_deny.ogg', 50, TRUE)
+				return FALSE
+
+			active = TRUE
+			//Some roles get faster extraction
+			var/user_role = usr?.mind?.assigned_role
+			var/extraction_delay = 300
+			var/living_players
+			switch(user_role)
+				if("Clerk")
+					extraction_delay = 50
+				if("Records Officer")	//No clue what the fuck you're doing here but go off.
+					extraction_delay = 30
+				if("Extraction Officer")
+					extraction_delay = 1
+			for(var/mob/living/carbon/human/L in GLOB.player_list)
+				living_players++	//There's no fucking easier way to do this IIRC
+			if(living_players<5)	//you should have A clerk by 5 living players
+				extraction_delay = 1
+
+			if(do_after(usr, extraction_delay, target = src))
+				var/obj/item/I = new E.item_path(get_turf(src))
+				A.stored_boxes -= E.cost
+				A.current_ego += I
+				to_chat(usr, "<span class='notice'>[I] has been dispensed!</span>")
+				playsound(get_turf(src), 'sound/machines/terminal_prompt_confirm.ogg', 50, TRUE)
+				updateUsrDialog()
+				active = FALSE
+				return TRUE
+			else
+				playsound(get_turf(src), 'sound/machines/terminal_prompt_deny.ogg', 50, TRUE)
+				active = FALSE
+				return FALSE
+
 		if(href_list["info"])
 			var/dat = html_decode(href_list["info"])
 			var/datum/browser/popup = new(usr, "ego_info", "EGO Purchase Console", 340, 400)
