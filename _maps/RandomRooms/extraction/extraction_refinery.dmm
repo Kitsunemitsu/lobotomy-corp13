@@ -1,0 +1,64 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/closed/indestructible/reinforced,
+/area/facility_hallway/extraction)
+"e" = (
+/obj/machinery/door/airlock/public/glass{
+	hackProof = 1;
+	max_integrity = 250000000;
+	name = "Extraction Backroom";
+	normal_integrity = 250000000;
+	req_access_txt = "41";
+	whitelist_door = 1
+	},
+/turf/open/floor/facility/dark,
+/area/facility_hallway/extraction)
+"f" = (
+/obj/structure/refinery,
+/turf/open/floor/facility/dark,
+/area/facility_hallway/extraction)
+"l" = (
+/turf/open/floor/facility/dark,
+/area/facility_hallway/extraction)
+"X" = (
+/obj/structure/closet/crate,
+/obj/item/rawpe,
+/obj/item/rawpe,
+/turf/open/floor/facility/dark,
+/area/facility_hallway/extraction)
+
+(1,1,1) = {"
+a
+a
+e
+a
+a
+"}
+(2,1,1) = {"
+a
+X
+l
+l
+a
+"}
+(3,1,1) = {"
+a
+l
+l
+l
+a
+"}
+(4,1,1) = {"
+a
+l
+f
+X
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+a
+a
+"}
