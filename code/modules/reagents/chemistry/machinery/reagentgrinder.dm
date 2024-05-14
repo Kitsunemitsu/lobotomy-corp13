@@ -161,7 +161,7 @@
 				to_chat(user, "<span class='notice'>You fill [src] to the brim.</span>")
 		return TRUE
 
-	if(!I.grind_results && !I.juice_results)
+	if(!istype(I, /obj/item/food/grown)
 		if(user.a_intent == INTENT_HARM)
 			return ..()
 		else
