@@ -541,7 +541,7 @@
 	special = "Use this weapon in hand to dash. Attack after a dash for an AOE."
 	icon_state = "space"
 	force = 50	//Half white, half black.
-	damtype = list(WHITE_DAMAGE, WHITE_DAMAGE)
+	damtype = WHITE_DAMAGE
 	attack_verb_continuous = list("cuts", "attacks", "slashes")
 	attack_verb_simple = list("cut", "attack", "slash")
 	hitsound = 'sound/weapons/rapierhit.ogg'
