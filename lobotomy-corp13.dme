@@ -4135,6 +4135,8 @@
 #include "ModularTegustation\tegu_items\limbus_labs\!abno_overwrites.dm"
 #include "ModularTegustation\tegu_items\limbus_labs\!other_overwrites.dm"
 #include "ModularTegustation\tegu_items\limbus_labs\spawners.dm"
+#include "ModularTegustation\tegu_items\prosthetics\explosivearm.dm"
+#include "ModularTegustation\tegu_items\prosthetics\mantis.dm"
 #include "ModularTegustation\tegu_items\rcorp\!abno_overwrites.dm"
 #include "ModularTegustation\tegu_items\rcorp\basecode.dm"
 #include "ModularTegustation\tegu_items\rcorp\gadgets.dm"
