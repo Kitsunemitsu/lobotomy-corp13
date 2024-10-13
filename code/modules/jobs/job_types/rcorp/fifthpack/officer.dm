@@ -29,10 +29,10 @@
 	. = ..()
 	ADD_TRAIT(H, TRAIT_COMBATFEAR_IMMUNE, JOB_TRAIT)
 	var/datum/action/G = new /datum/action/cooldown/warbanner/captain
-	G.Grant(outfit_owner)
+	G.Grant(H)
 
 	G = new /datum/action/cooldown/warcry/captain
-	G.Grant(outfit_owner)
+	G.Grant(H)
 
 
 /datum/outfit/job/supportofficer
