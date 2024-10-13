@@ -5,11 +5,11 @@
 	spawn_positions = 1
 	selection_color = "#8888cc"
 
-	outfit = /datum/outfit/job/doctor
+	outfit = /datum/outfit/job/prosdoctor
 
-	access = list(ACCESS_MEDICAL)
-	minimal_access = list(ACCESS_MEDICAL)
-	paycheck = PAYCHECK_MEDIUM
+	access = list(ACCESS_GENETICS)
+	minimal_access = list(ACCESS_GENETICS)
+	paycheck = 700	//You need a lot of money
 	paycheck_department = ACCOUNT_MED
 
 	job_attribute_limit = 0
@@ -22,7 +22,7 @@
 	job_important = "You are the prosthetics surgeon, your clinic is in the Northwest alleys"
 	job_notice = "You are forbidden from reviving lobotomy corp employees."
 
-/datum/job/doctor/after_spawn(mob/living/carbon/human/H, mob/M, latejoin = FALSE)
+/datum/job/prosdoctor/after_spawn(mob/living/carbon/human/H, mob/M, latejoin = FALSE)
 	..()
 	ADD_TRAIT(H, TRAIT_WORK_FORBIDDEN, JOB_TRAIT)
 	ADD_TRAIT(H, TRAIT_COMBATFEAR_IMMUNE, JOB_TRAIT)
@@ -36,7 +36,7 @@
 	uniform = /obj/item/clothing/under/suit/lobotomy/plain
 	shoes = /obj/item/clothing/shoes/sneakers/white
 	head = /obj/item/clothing/head/beret/tegu/mint
-	suit =  /obj/item/clothing/suit/toggle/labcoat
+	suit =  /obj/item/clothing/suit/toggle/labcoat/roboticist
 
 	backpack = /obj/item/storage/backpack/medic
 	satchel = /obj/item/storage/backpack/satchel/med

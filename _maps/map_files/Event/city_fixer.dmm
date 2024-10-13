@@ -775,10 +775,10 @@
 /turf/open/floor/plasteel,
 /area/city/shop)
 "mv" = (
-/obj/machinery/door/airlock/public{
-	name = "prosthetic surgery clinic"
+/obj/machinery/door/poddoor/shutters/indestructible{
+	id = "outside"
 	},
-/turf/open/indestructible/white,
+/turf/closed/indestructible/fakeglass,
 /area/city/shop)
 "my" = (
 /obj/machinery/door/airlock/grunge{
@@ -2146,6 +2146,15 @@
 "PI" = (
 /turf/closed/indestructible/fakeglass,
 /area/city/shop)
+"PZ" = (
+/obj/machinery/button/door{
+	id = "outside";
+	name = "prosthetics clinic shutters";
+	pixel_y = 26;
+	req_access_txt = "9"
+	},
+/turf/open/floor/plating/ashplanet/rocky,
+/area/city)
 "Qb" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
 /obj/item/clothing/under/misc/pj/blue,
@@ -2262,6 +2271,15 @@
 /obj/structure/curtain/cloth,
 /turf/closed/indestructible/fakeglass,
 /area/city/fixers)
+"Vw" = (
+/obj/machinery/door/airlock/public{
+	name = "prosthetic surgery clinic"
+	},
+/obj/machinery/door/poddoor/shutters/indestructible{
+	id = "outside"
+	},
+/turf/open/indestructible/white,
+/area/city/shop)
 "Vy" = (
 /obj/structure/fence{
 	dir = 4
@@ -24350,12 +24368,12 @@ Oq
 Oq
 Oq
 Oq
-Oq
-Oq
-Oq
-Oq
-Oq
-Oq
+OT
+OT
+OT
+OT
+OT
+OT
 Oq
 Oq
 Oq
@@ -24608,10 +24626,10 @@ Oq
 Oq
 Oq
 OT
-OT
-OT
-OT
-OT
+yT
+OJ
+BC
+pZ
 OT
 Oq
 Oq
@@ -24865,10 +24883,10 @@ OT
 OT
 OT
 OT
-yT
-OJ
-BC
-pZ
+yX
+XR
+XR
+XR
 OT
 Oq
 Oq
@@ -25122,7 +25140,7 @@ fk
 IX
 bP
 OT
-yX
+pZ
 XR
 XR
 XR
@@ -26408,9 +26426,9 @@ Xi
 Xi
 Xi
 Xi
-OT
 mv
-PI
+mv
+Vw
 HA
 Ua
 WX
@@ -26665,7 +26683,7 @@ VD
 Rh
 Rh
 Xi
-Hm
+PZ
 Hm
 Hm
 HA
