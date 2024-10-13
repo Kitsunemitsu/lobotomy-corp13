@@ -150,7 +150,7 @@ SUBSYSTEM_DEF(cityevents)
 				processing.total_positions +=1
 
 		if(jobpicked == 4)
-			if(istype(processing, /datum/job/salsu))
+			if(istype(processing, /datum/job/roamingsalsu))
 				processing.total_positions += 1
 
 		if(jobpicked == 5)
