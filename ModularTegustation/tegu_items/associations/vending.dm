@@ -218,6 +218,7 @@
 		/obj/item/organ/liver/cybernetic/tier2 = 100,
 		/obj/item/organ/eyes/robotic/glow = 100,
 		/obj/item/organ/ears/cybernetic = 100,
+		/obj/item/organ/cyberimp/arm/zippy = 100,
 	)
 
 	premium = list(
@@ -225,6 +226,9 @@
 		/obj/item/bodypart/l_arm/robot/explosive = 100,
 		/obj/item/bodypart/r_arm/robot/explosive = 100,
 		/obj/item/organ/cyberimp/arm/mantis = 100,
+		/obj/item/organ/cyberimp/arm/mantis/black = 100,
+		/obj/item/organ/cyberimp/arm/chainsword = 100,
+		/obj/item/organ/cyberimp/arm/surgery = 100,
 		/obj/item/extra_arm = 100,
 		//obj/item/bodypart/l_leg/robot/speed = 100,
 		//obj/item/bodypart/r_arm/robot/explosive = 100,

@@ -1,16 +1,16 @@
 /obj/item/organ/cyberimp/arm/mantis
 	name = "Mantis blade implants"
 	desc = "Mantis blades designed by some sicko in district."
-	contents = newlist(/obj/item/mantis/blade)
+	contents = newlist(/obj/item/ego_weapon/city/mantis)
 	syndicate_implant = TRUE
 
 /obj/item/organ/cyberimp/arm/mantis/l
 	zone = BODY_ZONE_L_ARM
 	syndicate_implant = TRUE
 
-/obj/item/mantis/blade
+/obj/item/ego_weapon/city/mantis
 	name = "mantis blade"
-	desc = "A blade designed to be hidden just beneath the skin. The brain is directly linked to this bad boy, allowing it to spring into action. Deals damage when equipped."
+	desc = "A blade designed to be hidden just beneath the skin. The brain is directly linked to this bad boy, allowing it to spring into action. Deals red damage when equipped."
 	icon = 'ModularTegustation/tegu_items/prosthetics/icons/generic.dmi'
 	icon_state = "mantis"
 	hitsound = 'sound/weapons/bladeslice.ogg'
@@ -22,7 +22,7 @@
 	attack_verb_simple = list("attack", "slash", "stab", "slice", "tear", "lacerate", "rip", "dice", "cut")
 
 
-/obj/item/mantis/blade/equipped(mob/user, slot, initial)
+/obj/item/ego_weapon/city/mantis/equipped(mob/user, slot, initial)
 	. = ..()
 	if(slot != ITEM_SLOT_HANDS)
 		return
@@ -35,4 +35,21 @@
 	//little bit of stam loss
 	var/mob/living/carbon/human/H = user
 	H.adjustStaminaLoss(H.maxHealth*0.5, TRUE, TRUE)
+
+
+/obj/item/organ/cyberimp/arm/mantis/black
+	name = "Mantis blade (B) implants"
+	desc = "Mantis blades designed by some sicko in district."
+	contents = newlist(/obj/item/ego_weapon/city/mantis/black)
+	syndicate_implant = TRUE
+
+/obj/item/organ/cyberimp/arm/mantis/black/l
+	zone = BODY_ZONE_L_ARM
+	syndicate_implant = TRUE
+
+/obj/item/ego_weapon/city/mantis/black
+	name = "mantis blade (B)"
+	desc = "A blade designed to be hidden just beneath the skin. The brain is directly linked to this bad boy, allowing it to spring into action. Deals black damage when equipped."
+	icon_state = "mantisblack"
+	damtype = BLACK_DAMAGE
 
