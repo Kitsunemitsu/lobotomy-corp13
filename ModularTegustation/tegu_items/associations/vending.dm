@@ -230,6 +230,7 @@
 		/obj/item/organ/cyberimp/arm/chainsword = 100,
 		/obj/item/organ/cyberimp/arm/surgery = 100,
 		/obj/item/extra_arm = 100,
+		/obj/item/extra_arm/double = 100,
 		//obj/item/bodypart/l_leg/robot/speed = 100,
 		//obj/item/bodypart/r_arm/robot/explosive = 100,
 	)
