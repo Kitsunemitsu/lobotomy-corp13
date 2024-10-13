@@ -11,10 +11,10 @@
 
 
 /obj/item/ego_weapon/city/handchainsword
-	name = "mantis blade"
+	name = "chainsword"
 	desc = "This weapon attacks many times, grafted to your hand."
 	icon = 'ModularTegustation/tegu_items/prosthetics/icons/generic.dmi'
-	icon_state = "mantis"
+	icon_state = "hand_chainsword"
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	flags_1 = CONDUCT_1
 	force = 15
