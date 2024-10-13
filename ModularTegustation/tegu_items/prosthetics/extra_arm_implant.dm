@@ -31,6 +31,6 @@ GLOBAL_LIST_EMPTY(threearmed_fucks)
 
 /datum/movespeed_modifier/armimplant
 	variable = TRUE
-	multiplicative_slowdown = 1.2
+	multiplicative_slowdown = 1.15
 
 
