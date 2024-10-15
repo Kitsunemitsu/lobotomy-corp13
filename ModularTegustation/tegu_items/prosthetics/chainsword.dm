@@ -7,7 +7,6 @@
 
 /obj/item/organ/cyberimp/arm/chainsword/l
 	zone = BODY_ZONE_L_ARM
-	syndicate_implant = TRUE
 
 
 /obj/item/ego_weapon/city/handchainsword
