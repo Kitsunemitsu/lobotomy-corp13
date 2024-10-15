@@ -6,7 +6,6 @@
 
 /obj/item/organ/cyberimp/arm/mantis/l
 	zone = BODY_ZONE_L_ARM
-	syndicate_implant = TRUE
 
 /obj/item/ego_weapon/city/mantis
 	name = "mantis blade"
