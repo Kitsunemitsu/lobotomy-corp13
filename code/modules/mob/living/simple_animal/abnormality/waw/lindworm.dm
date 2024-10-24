@@ -11,7 +11,7 @@
 	health = 700
 	rapid_melee = 1
 	move_to_delay = 3
-	damage_coeff = list(RED_DAMAGE = 0.5, WHITE_DAMAGE = 0.5, BLACK_DAMAGE = 1.6, PALE_DAMAGE = 1.2)
+	damage_coeff = list(RED_DAMAGE = 1, WHITE_DAMAGE = 1, BLACK_DAMAGE = 1, PALE_DAMAGE = 1)
 	melee_damage_lower = 60
 	melee_damage_upper = 70
 	melee_damage_type = RED_DAMAGE
@@ -23,14 +23,14 @@
 	threat_level = WAW_LEVEL
 	start_qliphoth = 2
 	work_chances = list(
-		ABNORMALITY_WORK_INSTINCT = 45,
-		ABNORMALITY_WORK_INSIGHT = list(50, 60, 70, 80, 90),
-		ABNORMALITY_WORK_ATTACHMENT = 45,
-		ABNORMALITY_WORK_REPRESSION = 45,
+		ABNORMALITY_WORK_INSTINCT = 60,
+		ABNORMALITY_WORK_INSIGHT = 60,
+		ABNORMALITY_WORK_ATTACHMENT = 60,
+		ABNORMALITY_WORK_REPRESSION = 60,
 	)
 	work_damage_amount = 10
 	work_damage_type = list(WHITE_DAMAGE, RED_DAMAGE)	//Deals both red and white
-	death_message = "stops moving, with its torso rotating forwards."
+//	death_message = "stops moving, with its torso rotating forwards."
 //	death_sound = 'sound/abnormalities/lindworm/death.ogg'
 
 	ego_list = list(
@@ -42,6 +42,10 @@
 
 	color = "#234e99"
 	var/layers_left = 5
+	var/mob/living/carbon/human/red_weak
+	var/mob/living/carbon/human/white_weak
+	var/mob/living/carbon/human/black_weak
+	var/mob/living/carbon/human/pale_weak
 
 /mob/living/simple_animal/hostile/abnormality/lindworm/death(gibbed)
 	for(var/turf/open/T in view(5, src))
@@ -60,6 +64,7 @@
 		revive(full_heal = TRUE, admin_revive = TRUE)
 		return
 
+	CleanupDefense()
 	density = FALSE
 	animate(src, alpha = 0, time = 10 SECONDS)
 	QDEL_IN(src, 10 SECONDS)
@@ -80,8 +85,6 @@
 			HandleLayers()
 			H.gib()
 
-
-
 /mob/living/simple_animal/hostile/abnormality/lindworm/proc/HandleLayers()
 	switch(layers_left)
 		if(0)
@@ -94,6 +97,69 @@
 			color = "#4e73b5"
 		else
 			color = "#234e99"
+
+//Work shit
+
+/mob/living/simple_animal/hostile/abnormality/lindworm/PostWorkEffect(mob/living/carbon/human/user, work_type, pe, work_time)
+	switch(work_type)
+		if(ABNORMALITY_WORK_INSTINCT)
+			if(!red_weak)	//Decrease red mod, store who's being worked on and lower a layer.
+				red_weak = user
+				user.physiology.red_mod *= 1.3
+				layers_left-=1
+				to_chat(user, span_userdanger("You feel your armor shed; and a layer falls away from the lindworm."))
+				playsound(get_turf(src), 'sound/abnormalities/bigbird/bite.ogg', 50, 1, 2)
+				new /obj/effect/gibspawner/generic/silent(get_turf(src))
+				HandleLayers()
+
+		if(ABNORMALITY_WORK_INSIGHT)
+			if(!white_weak)
+				white_weak = user
+				user.physiology.white_mod *= 1.3
+				layers_left-=1
+				to_chat(user, span_userdanger("You feel your armor shed; and a layer falls away from the lindworm."))
+				playsound(get_turf(src), 'sound/abnormalities/bigbird/bite.ogg', 50, 1, 2)
+				new /obj/effect/gibspawner/generic/silent(get_turf(src))
+				HandleLayers()
+
+		if(ABNORMALITY_WORK_ATTACHMENT)
+			if(!black_weak)
+				black_weak = user
+				user.physiology.black_mod *= 1.3
+				layers_left-=1
+				to_chat(user, span_userdanger("You feel your armor shed; and a layer falls away from the lindworm."))
+				playsound(get_turf(src), 'sound/abnormalities/bigbird/bite.ogg', 50, 1, 2)
+				new /obj/effect/gibspawner/generic/silent(get_turf(src))
+				HandleLayers()
+
+		if(ABNORMALITY_WORK_REPRESSION)
+			if(!pale_weak)
+				pale_weak = user
+				user.physiology.pale_mod *= 1.3
+				layers_left-=1
+				to_chat(user, span_userdanger("You feel your armor shed; and a layer falls away from the lindworm."))
+				playsound(get_turf(src), 'sound/abnormalities/bigbird/bite.ogg', 50, 1, 2)
+				new /obj/effect/gibspawner/generic/silent(get_turf(src))
+				HandleLayers()
+
+
+
+/mob/living/simple_animal/hostile/abnormality/lindworm/proc/CleanupDefense()
+	if(red_weak)
+		red_weak.physiology.red_mod /= 1.3
+		to_chat(red_weak, span_notice("You feel your natural body hardening again."))
+
+	if(white_weak)
+		white_weak.physiology.white_mod /= 1.3
+		to_chat(white_weak, span_notice("You feel your natural body hardening again."))
+
+	if(black_weak)
+		black_weak.physiology.black_mod /= 1.3
+		to_chat(black_weak, span_notice("You feel your natural body hardening again."))
+
+	if(pale_weak)
+		pale_weak.physiology.pale_mod /= 1.3
+		to_chat(pale_weak, span_notice("You feel your natural body hardening again."))
 
 
 // Turf effect
