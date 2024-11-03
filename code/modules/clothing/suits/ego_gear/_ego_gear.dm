@@ -11,12 +11,16 @@
 	w_class = WEIGHT_CLASS_BULKY								//No more stupid 10 egos in bag
 	allowed = list(/obj/item/gun, /obj/item/ego_weapon, /obj/item/melee)
 	drag_slowdown = 1
-	var/equip_slowdown = 3 SECONDS
+	var/equip_slowdown = 15 SECONDS
 
 	var/obj/item/clothing/head/ego_hat/hat = null // Hat type, see clothing/head/_ego_head.dm
 	var/obj/item/clothing/neck/ego_neck/neck = null // Neckwear, see clothing/neck/_neck.dm
 	var/list/attribute_requirements = list()
 	var/equip_bonus
+
+/obj/item/clothing/suit/armor/ego_gear/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/two_handed, require_twohands=TRUE, force_unwielded=0, force_wielded=0)
 
 /obj/item/clothing/suit/armor/ego_gear/Initialize()
 	. = ..()
@@ -36,7 +40,24 @@
 	if(slot_flags & slot) // Equipped to right slot, not just in hands
 		if(!CanUseEgo(H))
 			return FALSE
+
+		for(var/obj/machinery/smartfridge/extraction_storage/ego_armor/G in view(7,H))
+			equip_slowdown = 0
+			to_chat(H, "<span class='nicegreen'>Equipping armor in extraction is instant!</span>")
+			break
+
+		if(!(SSmaptype.maptype in SSmaptype.lc13maps))
+			equip_slowdown = 3 SECONDS
+
 		if(equip_slowdown > 0)
+			for(var/obj/machinery/computer/abnormality/G in view(1,H))
+				equip_slowdown /= 5	//5 times less near a console
+				break
+
+			if(equip_slowdown >= 3 SECONDS)
+				to_chat(H, "<span class='warning'>This would be much closer in extraction or beside a work console...</span>")
+
+
 			if(!do_after(H, equip_slowdown, target = H))
 				return FALSE
 	return ..()

@@ -11,6 +11,9 @@ SUBSYSTEM_DEF(maptype)
 	var/maptype = "lc13"			//for the love of god, do not change the default we will all die -Bootlegbow
 	var/jobtype		//If a map RNGs which jobs are available, use this
 
+	//Map tags that are ONLY Lc13
+	var/list/lc13maps = list("lc13", "fishing", "wonderlabs")
+
 	//All the map tags that delete all jobs and replace them with others.
 	var/list/clearmaps = list("rcorp", "city", "wcorp", "limbus_labs", "fixers")
 
