@@ -620,6 +620,7 @@
 				SIGNAL_ADDTRAIT(TRAIT_NOLIMBDISABLE),
 				))
 	if(owner)
+		on_limb_gain()
 		if(initial(can_be_disabled))
 			if(HAS_TRAIT(owner, TRAIT_NOLIMBDISABLE))
 				set_can_be_disabled(FALSE)
@@ -629,6 +630,9 @@
 		if(needs_update_disabled)
 			update_disabled()
 
+///Simple proc for gaining a limb
+/obj/item/bodypart/proc/on_limb_gain()
+	return
 
 ///Proc to change the value of the `can_be_disabled` variable and react to the event of its change.
 /obj/item/bodypart/proc/set_can_be_disabled(new_can_be_disabled)

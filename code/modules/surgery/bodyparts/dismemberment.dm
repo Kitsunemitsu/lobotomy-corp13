@@ -44,8 +44,12 @@
 		if(new_turf.density)
 			break
 	throw_at(target_turf, throw_range, throw_speed)
+	on_dismember()
 	return TRUE
 
+//I need this for prosthetic shit
+/obj/item/bodypart/proc/on_dismember()
+	return
 
 /obj/item/bodypart/chest/dismember()
 	if(!owner)
