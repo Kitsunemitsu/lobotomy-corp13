@@ -63,6 +63,9 @@
 	var/exp_type = ""
 	var/exp_type_department = ""
 
+	//This was added because people LOVE playing interns at like 600 hrs of playtime.
+	var/max_exp = 0
+
 	//The amount of good boy points playing this role will earn you towards a higher chance to roll antagonist next round
 	//can be overridden by antag_rep.txt config
 	var/antag_rep = 10

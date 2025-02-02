@@ -924,6 +924,13 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 				continue
 			if(job.mentor_only && !is_mentor_player(user.client))		//Don't show these.
 				continue
+
+			//Does the job have a maximum playtime?
+			if(job.max_exp)
+				if(user.client.prefs.exp[job_title] >= max_exp) // You can only ever play 10 hrs of these roles.
+					continue
+
+
 			index += 1
 			if((index >= limit) || (job.title in splitJobs))
 				width += widthPerColumn
